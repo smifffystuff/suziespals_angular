@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+
+import { Profile } from '../../profile.model';
 
 @Component({
   selector: 'app-profile-item',
@@ -6,10 +8,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./profile-item.component.css']
 })
 export class ProfileItemComponent implements OnInit {
+  @Input() profile: Profile;
+  @Output() profileSelected = new EventEmitter<void>();
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  onSelected() {
+    this.profileSelected.emit();
   }
-
 }

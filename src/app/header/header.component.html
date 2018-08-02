@@ -1,13 +1,25 @@
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a href="#" class="navbar-brand">Suzie's Pals</a>
+      <a
+        href="#"
+        class="navbar-brand"
+      >Suzie's Pals</a>
     </div>
 
     <div class="navbar-default">
       <ul class="nav navbar-nav">
         <li>
-          <a href="#">Profiles</a>
+          <a
+            href="#"
+            (click)="onSelect('profiles')"
+          >Profiles</a>
+        </li>
+        <li>
+          <a
+            href="#"
+            (click)="onSelect('community')"
+          >Community</a>
         </li>
         <li>
           <a href="#">Login</a>
@@ -20,8 +32,15 @@
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-          <a href="#" class="dropdwon-toggle" role="button">Manage
+        <li
+          class="dropdown"
+          appDropdown
+        >
+          <a
+            href="#"
+            class="dropdwon-toggle"
+            role="button"
+          >Manage
             <span class="caret"></span>
           </a>
           <ul class="dropdown-menu">

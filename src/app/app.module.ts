@@ -10,13 +10,14 @@ import { SignupComponent } from './auth/signup/signup.component';
 import { SigninComponent } from './auth/signin/signin.component';
 import { ConfirmEmailComponent } from './auth/confirm-email/confirm-email.component';
 import { ProfilesComponent } from './profiles/profiles.component';
-import { PostsComponent } from './posts/posts.component';
-import { PostsListComponent } from './posts/posts-list/posts-list.component';
-import { PostCreateComponent } from './posts/post-create/post-create.component';
-import { PostComponent } from './posts/post/post.component';
 import { ProfilesListComponent } from './profiles/profiles-list/profiles-list.component';
 import { ProfileDetailComponent } from './profiles/profile-detail/profile-detail.component';
 import { ProfileItemComponent } from './profiles/profiles-list/profile-item/profile-item.component';
+import { CommunityComponent } from './community/community.component';
+import { CommunityReplyComponent } from './community/community-reply/community-reply.component';
+import { DropdownDirective } from './shared/dropdown.directive';
+import { ProfilesService } from './profiles/profiles.service';
+import { CommunityService } from './community/community.service';
 
 @NgModule({
   declarations: [
@@ -27,16 +28,15 @@ import { ProfileItemComponent } from './profiles/profiles-list/profile-item/prof
     SigninComponent,
     ConfirmEmailComponent,
     ProfilesComponent,
-    PostsComponent,
-    PostsListComponent,
-    PostCreateComponent,
-    PostComponent,
     ProfilesListComponent,
     ProfileDetailComponent,
-    ProfileItemComponent
+    ProfileItemComponent,
+    CommunityComponent,
+    CommunityReplyComponent,
+    DropdownDirective
   ],
   imports: [BrowserModule, FormsModule, HttpModule],
-  providers: [],
+  providers: [ProfilesService, CommunityService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

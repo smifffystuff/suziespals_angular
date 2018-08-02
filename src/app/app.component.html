@@ -1,10 +1,10 @@
-<app-header></app-header>
+<app-header (featureSelected)="onNavigate($event)"></app-header>
 <div class="container">
   <div class="row">
     <div class="col-md-12">
       <!-- <app-auth></app-auth> -->
-      <app-profiles></app-profiles>
-      <!-- <app-posts></app-posts> -->
+      <app-profiles *ngIf="loadedFeature === 'profiles'"></app-profiles>
+      <app-community *ngIf="loadedFeature !== 'profiles'"></app-community>
     </div>
   </div>
 </div>

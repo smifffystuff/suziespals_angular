@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Profile } from '../profile.model';
+import { ProfilesService } from '../profiles.service';
 
 @Component({
   selector: 'app-profiles-list',
@@ -7,32 +8,16 @@ import { Profile } from '../profile.model';
   styleUrls: ['./profiles-list.component.css']
 })
 export class ProfilesListComponent implements OnInit {
-  profiles: Profile[] = [
-    new Profile(
-      'profile1',
-      'user1',
-      'Suzie',
-      'Dog',
-      'Labrador',
-      'Female',
-      '14 weeks',
-      'I am a beatifull little puppy (at the moment)',
-      'https://upload.wikimedia.org/wikipedia/commons/2/26/Yellow_Labrador_puppy_%284165776031%29.jpg'
-    ),
-    new Profile(
-      'profile2',
-      'user1',
-      'Suzie',
-      'Dog',
-      'Labrador',
-      'Female',
-      '14 weeks',
-      'I am a beatifull little puppy (at the moment)',
-      'https://upload.wikimedia.org/wikipedia/commons/2/26/Yellow_Labrador_puppy_%284165776031%29.jpg'
-    )
-  ];
+  @Output() profileWasSelected = new EventEmitter<Profile>();
+  profiles: Profile[];
 
-  constructor() {}
+  constructor(private profileService: ProfilesService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.profiles = this.profileService.getProfiles();
+  }
+
+  onSelected(profile: Profile) {
+    this.profileWasSelected.emit(profile);
+  }
 }

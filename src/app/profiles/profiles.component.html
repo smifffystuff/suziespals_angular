@@ -1,8 +1,14 @@
 <div class="row">
   <div class="col-md-5">
-    <app-profiles-list></app-profiles-list>
+    <app-profiles-list (profileWasSelected)="selectedProfile = $event"></app-profiles-list>
   </div>
   <div class="col-md-7">
-    <app-profile-detail></app-profile-detail>
+    <app-profile-detail
+      *ngIf="selectedProfile; else infoText"
+      [profile]="selectedProfile"
+    ></app-profile-detail>
+    <ng-template #infoText>
+      <p>Please select a recipie</p>
+    </ng-template>
   </div>
 </div>
