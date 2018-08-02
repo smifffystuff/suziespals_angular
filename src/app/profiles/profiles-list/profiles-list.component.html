@@ -1,0 +1,20 @@
+<div class="row">
+  <div class="col-xs-12">
+    <button class="btn btn-success">New Profile</button>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-xs-12">
+    <a href="#" class="list-group-item clearfix" *ngFor="let profile of profiles">
+      <div class="pull-left">
+        <h4 class="list-group-item-heading">{{profile.petName}}</h4>
+        <p class="list-group-item-text">{{profile.bio}}</p>
+      </div>
+      <span class="pull-right">
+        <img [src]="profile.imageName" alt="{{profile.petName}}" class="img-responsive" style="max-height: 50px">
+      </span>
+    </a>
+    <app-profile-item></app-profile-item>
+  </div>
+</div>

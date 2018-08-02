@@ -14,6 +14,9 @@ import { PostsComponent } from './posts/posts.component';
 import { PostsListComponent } from './posts/posts-list/posts-list.component';
 import { PostCreateComponent } from './posts/post-create/post-create.component';
 import { PostComponent } from './posts/post/post.component';
+import { ProfilesListComponent } from './profiles/profiles-list/profiles-list.component';
+import { ProfileDetailComponent } from './profiles/profile-detail/profile-detail.component';
+import { ProfileItemComponent } from './profiles/profiles-list/profile-item/profile-item.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +30,10 @@ import { PostComponent } from './posts/post/post.component';
     PostsComponent,
     PostsListComponent,
     PostCreateComponent,
-    PostComponent
+    PostComponent,
+    ProfilesListComponent,
+    ProfileDetailComponent,
+    ProfileItemComponent
   ],
   imports: [BrowserModule, FormsModule, HttpModule],
   providers: [],
