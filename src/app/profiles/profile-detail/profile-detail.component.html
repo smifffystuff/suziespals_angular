@@ -28,9 +28,12 @@
       </button>
       <ul class="dropdown-menu">
         <li>
-          <a href="#">Add Post</a>
-          <a href="#">Edit Profile</a>
-          <a href="#">Delete Profile</a>
+          <a (click)="addingPost = true">New Post</a>
+          <a
+            [routerLink]="['edit']"
+            style="cursor: pointer"
+          >Edit Profile</a>
+          <a style="cursor: pointer">Delete Profile</a>
         </li>
       </ul>
     </div>
@@ -41,6 +44,57 @@
     Bio
   </div>
   <div class="col-xs-12">
-    Posts
+    <app-profile-post-list
+      [posts]="profile.posts"
+      *ngIf="!addingPost"
+    ></app-profile-post-list>
+    <div
+      class="row"
+      *ngIf="addingPost"
+    >
+      <div class="col-xs-12">
+        <form>
+          <div class="row">
+            <div class="col-sm-12 form-group">
+              <label for="title">Post Title</label>
+              <input
+                type="text"
+                id="title"
+                class="form-control"
+                #titleInput
+              >
+            </div>
+            <div class="col-sm-12 form-group">
+              <label for="message">Message</label>
+              <textarea
+                id="message"
+                class="form-control"
+                #messageInput
+              ></textarea>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">
+              <button
+                class="btn btn-success"
+                type="submit"
+                style="margin-right: 1rem"
+                (click)="onAddPost()"
+              >Add</button>
+              <button
+                class="btn btn-danger"
+                type="button"
+                style="margin-right: 1rem"
+              >Delete</button>
+              <button
+                class="btn btn-primary"
+                type="button"
+              >Clear</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
   </div>
 </div>

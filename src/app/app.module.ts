@@ -14,10 +14,15 @@ import { ProfilesListComponent } from './profiles/profiles-list/profiles-list.co
 import { ProfileDetailComponent } from './profiles/profile-detail/profile-detail.component';
 import { ProfileItemComponent } from './profiles/profiles-list/profile-item/profile-item.component';
 import { CommunityComponent } from './community/community.component';
-import { CommunityReplyComponent } from './community/community-reply/community-reply.component';
+import { CommunityPostComponent } from './community/community-post/community-post.component';
 import { DropdownDirective } from './shared/dropdown.directive';
 import { ProfilesService } from './profiles/profiles.service';
 import { CommunityService } from './community/community.service';
+import { ProfilePostDetailComponent } from './profiles/profile-detail/profile-post-list/profile-post-detail/profile-post-detail.component';
+import { ProfilePostListComponent } from './profiles/profile-detail/profile-post-list/profile-post-list.component';
+import { AppRoutingModule } from './app-routing.module';
+import { ProfileStartComponent } from './profiles/profile-start/profile-start.component';
+import { ProfileEditComponent } from './profiles/profile-edit/profile-edit.component';
 
 @NgModule({
   declarations: [
@@ -32,10 +37,14 @@ import { CommunityService } from './community/community.service';
     ProfileDetailComponent,
     ProfileItemComponent,
     CommunityComponent,
-    CommunityReplyComponent,
-    DropdownDirective
+    CommunityPostComponent,
+    DropdownDirective,
+    ProfilePostDetailComponent,
+    ProfilePostListComponent,
+    ProfileStartComponent,
+    ProfileEditComponent
   ],
-  imports: [BrowserModule, FormsModule, HttpModule],
+  imports: [BrowserModule, FormsModule, HttpModule, AppRoutingModule],
   providers: [ProfilesService, CommunityService],
   bootstrap: [AppComponent]
 })

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Post } from '../shared/post.model';
+import { CommunityService } from './community.service';
 
 @Component({
   selector: 'app-community',
@@ -8,28 +9,14 @@ import { Post } from '../shared/post.model';
   styleUrls: ['./community.component.css']
 })
 export class CommunityComponent implements OnInit {
-  posts: Post[] = [
-    new Post(
-      'post1',
-      'profile1',
-      'My First Post',
-      'This is the first ever test post',
-      null
-    ),
-    new Post(
-      'post2',
-      'profile1',
-      'My Second Post',
-      'This is the second test post',
-      'https://upload.wikimedia.org/wikipedia/commons/2/26/Yellow_Labrador_puppy_%284165776031%29.jpg'
-    )
-  ];
+  posts: Post[];
 
-  constructor() {}
+  constructor(private communityService: CommunityService) {}
 
-  ngOnInit() {}
-
-  onPostAdded(newPost: Post) {
-    this.posts.push(newPost);
+  ngOnInit() {
+    this.posts = this.communityService.getPosts();
+    this.communityService.postsChanged.subscribe((newPosts: Post[]) => {
+      this.posts = newPosts;
+    });
   }
 }

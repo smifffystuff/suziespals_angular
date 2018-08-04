@@ -9,26 +9,20 @@
 
     <div class="navbar-default">
       <ul class="nav navbar-nav">
-        <li>
-          <a
-            href="#"
-            (click)="onSelect('profiles')"
-          >Profiles</a>
+        <li routerLinkActive="active">
+          <a routerLink="/profiles">Profiles</a>
+        </li>
+        <li routerLinkActive="active">
+          <a routerLink="/community">Community</a>
         </li>
         <li>
-          <a
-            href="#"
-            (click)="onSelect('community')"
-          >Community</a>
+          <a style="cursor: pointer">Login</a>
         </li>
         <li>
-          <a href="#">Login</a>
+          <a style="cursor: pointer">Signup</a>
         </li>
         <li>
-          <a href="#">Signup</a>
-        </li>
-        <li>
-          <a href="#">Confirm Email</a>
+          <a style="cursor: pointer">Confirm Email</a>
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -37,7 +31,7 @@
           appDropdown
         >
           <a
-            href="#"
+            style="cursor: pointer"
             class="dropdwon-toggle"
             role="button"
           >Manage
@@ -45,10 +39,10 @@
           </a>
           <ul class="dropdown-menu">
             <li>
-              <a href="#">Link</a>
+              <a style="cursor: pointer">Link</a>
             </li>
             <li>
-              <a href="#">Link</a>
+              <a style="cursor: pointer">Link</a>
             </li>
           </ul>
         </li>

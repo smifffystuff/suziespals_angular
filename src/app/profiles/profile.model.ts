@@ -1,3 +1,5 @@
+import { Post } from '../shared/post.model';
+
 export class Profile {
   constructor(
     public profileId: string,
@@ -8,6 +10,7 @@ export class Profile {
     public gender: string,
     public age: string,
     public bio: string,
-    public imageName: string
+    public imageName: string,
+    public posts: Post[]
   ) {}
 }

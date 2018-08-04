@@ -1,0 +1,17 @@
+<div class="row">
+  <div class="col-xs-12">
+    <div class="pull-left">
+      <h4 class="list-group-item-heading">{{post.title}}</h4>
+      <p class="list-group-item-text">{{post.message}}</p>
+    </div>
+    <span class="pull-right">
+      <img
+        [src]="post.image"
+        alt="{{post.title}}"
+        class="img-responsive"
+        style="max-height: 50px"
+        *ngIf="post.image"
+      >
+    </span>
+  </div>
+</div>

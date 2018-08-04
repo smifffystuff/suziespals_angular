@@ -1,5 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Profile } from '../profile.model';
+import { Post } from '../../shared/post.model';
+import { CommunityService } from '../../community/community.service';
+import {
+  ActivatedRoute,
+  Params
+} from '../../../../node_modules/@angular/router';
+import { ProfilesService } from '../profiles.service';
 
 @Component({
   selector: 'app-profile-detail',
@@ -7,9 +14,38 @@ import { Profile } from '../profile.model';
   styleUrls: ['./profile-detail.component.css']
 })
 export class ProfileDetailComponent implements OnInit {
-  @Input() profile: Profile;
+  @ViewChild('titleInput') titleInputRef: ElementRef;
+  @ViewChild('messageInput') messageInputRef: ElementRef;
 
-  constructor() {}
+  profile: Profile;
+  id: string;
 
-  ngOnInit() {}
+  addingPost = false;
+
+  constructor(
+    private profileService: ProfilesService,
+    private communityService: CommunityService,
+    private route: ActivatedRoute
+  ) {}
+
+  ngOnInit() {
+    this.route.params.subscribe((params: Params) => {
+      this.id = params.id;
+      this.profile = this.profileService.getProfile(this.id);
+    });
+  }
+
+  onAddPost() {
+    const postTitle = this.titleInputRef.nativeElement.value;
+    const postMessage = this.messageInputRef.nativeElement.value;
+    const newPost = new Post(
+      new Date().getTime().toString(),
+      this.profile.profileId,
+      postTitle,
+      postMessage,
+      ''
+    );
+    this.addingPost = false;
+    this.communityService.addPost(newPost);
+  }
 }
