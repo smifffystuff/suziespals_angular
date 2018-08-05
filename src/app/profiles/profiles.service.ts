@@ -1,11 +1,9 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Profile } from './profile.model';
 import { CommunityService } from '../community/community.service';
 
 @Injectable()
 export class ProfilesService {
-  profileSelected = new EventEmitter<Profile>();
-
   private profiles: Profile[] = [
     new Profile(
       'profile1',
