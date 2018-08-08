@@ -1,5 +1,5 @@
-resource "aws_iam_policy" "suziespals-s3" {
-  name        = "suziespals-s3"
+resource "aws_iam_policy" "s3" {
+  name        = "${var.name}-s3"
   path        = "/"
   description = ""
 
@@ -12,26 +12,28 @@ resource "aws_iam_policy" "suziespals-s3" {
       "Effect": "Allow",
       "Action": "s3:*",
       "Resource": "*"
+    },
+    {
+      "Sid": "vpnaccess",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:DescribeNetworkInterfaces",
+        "ec2:CreateNetworkInterface",
+        "ec2:DeleteNetworkInterface"
+      ],
+      "Resource": "*"
     }
   ]
 }
 POLICY
 }
 
-resource "aws_iam_policy_attachment" "suziespals-s3-policy-attachment" {
-  name       = "suziespals-s3-policy-attachment"
-  policy_arn = "arn:aws:iam::240400571745:policy/suziespals-s3"
+resource "aws_iam_policy_attachment" "s3-policy-attachment" {
+  name       = "${var.name}-s3-policy-attachment"
+  policy_arn = "arn:aws:iam::240400571745:policy/${var.name}-s3"
   groups     = []
   users      = []
-  roles      = ["${aws_iam_role.suziespals_lambda_role.name}"]
-}
-
-resource "aws_iam_policy_attachment" "suziespals_dynamodb-policy-attachment" {
-  name       = "suziespals_dynamodb-policy-attachment"
-  policy_arn = "arn:aws:iam::240400571745:policy/suziespals_dynamodb"
-  groups     = []
-  users      = []
-  roles      = ["${aws_iam_role.suziespals_lambda_role.name}"]
+  roles      = ["${aws_iam_role.lambda_role.name}"]
 }
 
 resource "aws_iam_policy_attachment" "AWSLambdaBasicExecutionRole-policy-attachment" {
@@ -39,11 +41,11 @@ resource "aws_iam_policy_attachment" "AWSLambdaBasicExecutionRole-policy-attachm
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
   groups     = []
   users      = []
-  roles      = ["${aws_iam_role.suziespals_lambda_role.name}"]
+  roles      = ["${aws_iam_role.lambda_role.name}"]
 }
 
-resource "aws_iam_role" "suziespals_lambda_role" {
-  name = "suziespals_lambda_role"
+resource "aws_iam_role" "lambda_role" {
+  name = "${var.name}_lambda_role"
   path = "/"
 
   assume_role_policy = <<POLICY
@@ -63,5 +65,5 @@ POLICY
 }
 
 output "arn" {
-  value = "${aws_iam_role.suziespals_lambda_role.arn}"
+  value = "${aws_iam_role.lambda_role.arn}"
 }

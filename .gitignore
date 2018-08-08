@@ -44,3 +44,4 @@ Thumbs.db
 # Files containing sensative data
 aws_config.tf
 user_pool_info.ts
+sqlConfig.js

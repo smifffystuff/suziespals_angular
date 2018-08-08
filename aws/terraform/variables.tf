@@ -3,5 +3,5 @@ variable "site_name" {
 }
 
 variable "build_tables" {
-  default = "09:26"
+  default = "09:58"
 }

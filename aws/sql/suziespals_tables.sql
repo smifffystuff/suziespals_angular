@@ -1,8 +1,13 @@
-DROP TABLE IF EXISTS `suziespals`.`pet_profile`;
+-- last build 8/8/2018 @ 10:05
 
-CREATE TABLE `suziespals`.`pet_profile` (
+USE `suziespals`;
+
+
+DROP TABLE IF EXISTS `pet_profile`;
+
+CREATE TABLE `pet_profile` (
   `profileId` INT NOT NULL AUTO_INCREMENT,
-  `userId` INT NOT NULL,
+  `userId` VARCHAR(100) NOT NULL,
   `petName` VARCHAR(50) NOT NULL,
   `typeOfAnimal` VARCHAR(15),
   `breed` VARCHAR(30),
@@ -11,5 +16,4 @@ CREATE TABLE `suziespals`.`pet_profile` (
   `bio` MEDIUMTEXT NULL,
   `profileImageId` VARCHAR(25) NULL,
   PRIMARY KEY (`profileId`));
-
 

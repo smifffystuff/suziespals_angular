@@ -16,6 +16,11 @@ resource "aws_db_instance" "default" {
   publicly_accessible    = true
   skip_final_snapshot    = true
   vpc_security_group_ids = ["${var.sg_id}"]
+
+  provisioner "local-exec" {
+    command     = "/Users/martin/website/suziespals-ang/aws/sql/build.js"
+    interpreter = ["node"]
+  }
 }
 
 resource "null_resource" "build" {

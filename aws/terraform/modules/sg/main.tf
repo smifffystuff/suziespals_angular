@@ -12,6 +12,15 @@ resource "aws_security_group_rule" "msql_sg_in" {
   security_group_id = "${aws_security_group.mysql_sg.id}"
 }
 
+resource "aws_security_group_rule" "msql_sg_in_vpc" {
+  type              = "ingress"
+  from_port         = 3306
+  to_port           = 3306
+  protocol          = "TCP"
+  cidr_blocks       = ["172.31.0.0/16"]
+  security_group_id = "${aws_security_group.mysql_sg.id}"
+}
+
 resource "aws_security_group_rule" "msql_sg_out" {
   type              = "egress"
   from_port         = 0

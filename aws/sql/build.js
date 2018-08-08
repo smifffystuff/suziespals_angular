@@ -3,18 +3,14 @@ const AWS = require('aws-sdk');
 const rds = new AWS.RDS();
 
 const mysql = require('mysql');
+const db = require('./sqlConfig');
+
 const fs = require('fs');
 
-const sqlCreate =
-  fs.readFileSync(
-    '/Users/martin/website/suziespals-ang/aws/sql/suziespals_tables.sql'
-  ) + '';
+const sqlCreate = fs.readFileSync(__dirname + '/suziespals_tables.sql') + '';
 
 const dbConn = mysql.createConnection({
-  host: 'suziespals-instance.cxveiegb4bha.us-east-1.rds.amazonaws.com',
-  user: 'martinsmifff',
-  password: 'Su5an0518',
-  database: 'suziespals',
+  ...db,
   multipleStatements: true
 });
 
