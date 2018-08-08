@@ -36,7 +36,10 @@ export class CommunityComponent implements OnInit, OnDestroy {
     console.log('testing api');
 
     this.httpClient
-      .get('https://ph8lgj65l5.execute-api.us-east-1.amazonaws.com/dev/')
+      .post(
+        'https://6ejg5splnc.execute-api.us-east-1.amazonaws.com/dev/pet-profile',
+        {}
+      )
       .subscribe(data => {
         console.log(data);
       });
