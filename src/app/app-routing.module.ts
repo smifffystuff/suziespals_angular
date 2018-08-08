@@ -5,6 +5,8 @@ import { CommunityComponent } from './community/community.component';
 import { ProfileStartComponent } from './profiles/profile-start/profile-start.component';
 import { ProfileDetailComponent } from './profiles/profile-detail/profile-detail.component';
 import { ProfileEditComponent } from './profiles/profile-edit/profile-edit.component';
+import { SignupComponent } from './auth/signup/signup.component';
+import { SigninComponent } from './auth/signin/signin.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/community', pathMatch: 'full' },
@@ -18,7 +20,9 @@ const appRoutes: Routes = [
       { path: ':id/edit', component: ProfileEditComponent }
     ]
   },
-  { path: 'community', component: CommunityComponent }
+  { path: 'community', component: CommunityComponent },
+  { path: 'signup', component: SignupComponent },
+  { path: 'signin', component: SigninComponent }
 ];
 
 @NgModule({

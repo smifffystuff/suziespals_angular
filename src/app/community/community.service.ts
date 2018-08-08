@@ -1,8 +1,8 @@
 import { Post } from '../shared/post.model';
-import { EventEmitter } from '@angular/core';
+import { Subject } from 'rxjs';
 
 export class CommunityService {
-  postsChanged = new EventEmitter<Post[]>();
+  postsChanged = new Subject<Post[]>();
 
   private posts: Post[] = [
     new Post(
@@ -27,7 +27,7 @@ export class CommunityService {
 
   addPost(newPost: Post) {
     this.posts.push(newPost);
-    this.postsChanged.emit(this.posts.slice());
+    this.postsChanged.next(this.posts.slice());
   }
 
   getProfilePosts(profileId: string) {

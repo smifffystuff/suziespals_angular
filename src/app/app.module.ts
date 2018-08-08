@@ -1,14 +1,13 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
-import { AuthComponent } from './auth/auth.component';
+// import { AuthComponent } from './auth/auth.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { SigninComponent } from './auth/signin/signin.component';
-import { ConfirmEmailComponent } from './auth/confirm-email/confirm-email.component';
 import { ProfilesComponent } from './profiles/profiles.component';
 import { ProfilesListComponent } from './profiles/profiles-list/profiles-list.component';
 import { ProfileDetailComponent } from './profiles/profile-detail/profile-detail.component';
@@ -23,15 +22,19 @@ import { ProfilePostListComponent } from './profiles/profile-detail/profile-post
 import { AppRoutingModule } from './app-routing.module';
 import { ProfileStartComponent } from './profiles/profile-start/profile-start.component';
 import { ProfileEditComponent } from './profiles/profile-edit/profile-edit.component';
+import { AuthService } from './auth/auth.service';
+import { AlertComponent } from './shared/alert/alert.component';
+import { AlertService } from './shared/alert/alert.service';
+import { ValidateEqualDirective } from './auth/validate-equal.directive';
+import { AuthInerceptor } from './shared/auth.interceptor';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    AuthComponent,
+    // AuthComponent,
     SignupComponent,
     SigninComponent,
-    ConfirmEmailComponent,
     ProfilesComponent,
     ProfilesListComponent,
     ProfileDetailComponent,
@@ -42,10 +45,22 @@ import { ProfileEditComponent } from './profiles/profile-edit/profile-edit.compo
     ProfilePostDetailComponent,
     ProfilePostListComponent,
     ProfileStartComponent,
-    ProfileEditComponent
+    ProfileEditComponent,
+    AlertComponent,
+    ValidateEqualDirective
   ],
-  imports: [BrowserModule, FormsModule, HttpModule, AppRoutingModule],
-  providers: [ProfilesService, CommunityService],
+  imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule],
+  providers: [
+    ProfilesService,
+    CommunityService,
+    AuthService,
+    AlertService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInerceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

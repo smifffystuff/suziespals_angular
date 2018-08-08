@@ -18,6 +18,20 @@ module "rds" {
   db_password  = "${var.db_password}"
 }
 
+module "cognito" {
+  source = "./modules/cognito"
+
+  pool_name = "${var.site_name}"
+}
+
 output "db_endpoint" {
   value = "${module.rds.db_endpoint}"
+}
+
+output "user_pool_id" {
+  value = "${module.cognito.user_pool_id}"
+}
+
+output "app_client_id" {
+  value = "${module.cognito.app_client_id}"
 }

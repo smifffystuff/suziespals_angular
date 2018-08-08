@@ -1,3 +1,57 @@
-<p>
-  signin works!
-</p>
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+      <form
+        (ngSubmit)="onSignin(regForm)"
+        #regForm="ngForm"
+        novalidate
+      >
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="form-control"
+            ngModel
+            required
+            email
+            ngModel
+            #email="ngModel"
+          >
+          <small [hidden]="email.valid || (!email.touched
+              &&
+              !regForm.submitted)">
+            Email is required and format should be
+            <i>john@doe.com</i>.
+          </small>
+        </div>
+        <div
+          class="form-group"
+          *ngIf="!confirming"
+        >
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            class="form-control"
+            ngModel
+            required
+            #password="ngModel"
+          >
+          <small [hidden]="password.valid || (!password.touched
+              &&
+              !regForm.submitted)">
+            Password is required.
+          </small>
+        </div>
+        <button
+          class="btn btn-primary"
+          type="submit"
+          [disabled]="regForm.invalid"
+        >Sign In</button>
+      </form>
+    </div>
+  </div>
+</div>

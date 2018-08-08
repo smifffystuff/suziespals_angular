@@ -38,6 +38,9 @@ testem.log
 .DS_Store
 Thumbs.db
 
-aws_config.tf
 .terraform/
 *.tfstate.backup
+
+# Files containing sensative data
+aws_config.tf
+user_pool_info.ts

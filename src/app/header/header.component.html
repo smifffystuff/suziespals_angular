@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="navbar-header">
       <a
-        href="#"
+        routerLink="/"
         class="navbar-brand"
       >Suzie's Pals</a>
     </div>
@@ -15,17 +15,30 @@
         <li routerLinkActive="active">
           <a routerLink="/community">Community</a>
         </li>
-        <li>
-          <a style="cursor: pointer">Login</a>
-        </li>
-        <li>
-          <a style="cursor: pointer">Signup</a>
-        </li>
-        <li>
-          <a style="cursor: pointer">Confirm Email</a>
-        </li>
+
       </ul>
       <ul class="nav navbar-nav navbar-right">
+        <li>
+          <a
+            routerLink="/signin"
+            style="cursor: pointer"
+            *ngIf="!authService.isLoggedIn()"
+          >Sign In</a>
+        </li>
+        <li>
+          <a
+            routerLink="/signup"
+            style="cursor: pointer"
+            *ngIf="!authService.isLoggedIn()"
+          >Sign Up</a>
+        </li>
+        <li>
+          <a
+            *ngIf="authService.isLoggedIn()"
+            href="javascript:void(0)"
+            (click)="doLogout()"
+          >Logout</a>
+        </li>
         <li
           class="dropdown"
           appDropdown

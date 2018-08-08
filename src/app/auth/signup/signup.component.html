@@ -1,3 +1,135 @@
-<p>
-  signup works!
-</p>
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+      <form
+        (ngSubmit)="onSignup(regForm)"
+        #regForm="ngForm"
+        novalidate
+      >
+        <div
+          class="form-group"
+          *ngIf="!confirming"
+        >
+          <label for="name">Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            class="form-control"
+            [ngModel]="user.name"
+            required
+            minlength="3"
+            maxlength="25"
+            #name="ngModel"
+          >
+          <small [hidden]="name.valid || (!name.touched
+            &&
+            !regForm.submitted)">
+            Name is required and should be between 3 and 25 characters.
+          </small>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="form-control"
+            [ngModel]="user.email"
+            required
+            email
+            #email="ngModel"
+          >
+          <small [hidden]="email.valid || (!email.touched
+            &&
+            !regForm.submitted)">
+            Email is required and format should be
+            <i>john@doe.com</i>.
+          </small>
+        </div>
+        <div
+          class="form-group"
+          *ngIf="!confirming"
+        >
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            class="form-control"
+            [ngModel]="user.password"
+            required
+            #password="ngModel"
+            appValidateEqual="password2"
+            reverse="true"
+          >
+          <small [hidden]="password.valid || (!password.touched
+            &&
+            !regForm.submitted)">
+            Password is required.
+          </small>
+        </div>
+        <div
+          class="form-group"
+          *ngIf="!confirming"
+        >
+          <label for="password2">Confirm Password</label>
+          <input
+            type="password"
+            id="password2"
+            name="password2"
+            class="form-control"
+            [ngModel]="user.password2"
+            #password2="ngModel"
+            appValidateEqual="password"
+          >
+          <small [hidden]="password2.valid || (password2.pristine
+            &&
+            !regForm.submitted)">
+            Password mismatch.
+          </small>
+        </div>
+        <div class="form-group">
+          <input
+            type="checkbox"
+            id="confirming"
+            name="confirming"
+            (click)="confirming = !confirming"
+          >{{" "}}
+          <label for="confirming">Click here if you have received a confirmation code
+          </label>
+        </div>
+
+        <div
+          class="form-group"
+          *ngIf="confirming"
+        >
+          <label for="confirmationCode">Confirmation Code</label>
+          <input
+            type="text"
+            id="confirmationCode"
+            name="confirmationCode"
+            class="form-control"
+            ngModel
+            required
+            minlength="6"
+            maxlength="6"
+            pattern="[0-9]*"
+            #confirmationCode="ngModel"
+          >
+          <small [hidden]="confirmationCode.valid || (!confirmationCode.touched
+            &&
+            !regForm.submitted)">
+            Confirmation code is required and should be 6 numbers.
+          </small>
+        </div>
+
+        <button
+          class="btn btn-primary"
+          type="submit"
+          [disabled]="regForm.invalid"
+        >{{confirming ? 'Confirm Account' : 'Sign Up'}}</button>
+      </form>
+    </div>
+  </div>
+</div>

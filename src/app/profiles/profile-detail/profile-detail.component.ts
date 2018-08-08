@@ -2,10 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Profile } from '../profile.model';
 import { Post } from '../../shared/post.model';
 import { CommunityService } from '../../community/community.service';
-import {
-  ActivatedRoute,
-  Params
-} from '../../../../node_modules/@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 import { ProfilesService } from '../profiles.service';
 
 @Component({
