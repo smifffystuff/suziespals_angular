@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Post } from '../../../../shared/post.model';
+import { Post } from '../../../../models/post.model';
 
 @Component({
   selector: 'app-profile-post-detail',
@@ -7,7 +7,8 @@ import { Post } from '../../../../shared/post.model';
   styleUrls: ['./profile-post-detail.component.css']
 })
 export class ProfilePostDetailComponent implements OnInit {
-  @Input() post: Post;
+  @Input()
+  post: Post;
 
   constructor() {}
 

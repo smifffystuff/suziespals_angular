@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { Post } from '../../shared/post.model';
+import { Post } from '../../models/post.model';
 import { CommunityService } from '../community.service';
 
 @Component({
@@ -8,8 +8,10 @@ import { CommunityService } from '../community.service';
   styleUrls: ['./community-post.component.css']
 })
 export class CommunityPostComponent implements OnInit {
-  @ViewChild('titleInput') titleInputRef: ElementRef;
-  @ViewChild('messageInput') messageInputRef: ElementRef;
+  @ViewChild('titleInput')
+  titleInputRef: ElementRef;
+  @ViewChild('messageInput')
+  messageInputRef: ElementRef;
 
   constructor(private communityService: CommunityService) {}
 
@@ -18,13 +20,13 @@ export class CommunityPostComponent implements OnInit {
   onAddItem() {
     const postTitle = this.titleInputRef.nativeElement.value;
     const postMessage = this.messageInputRef.nativeElement.value;
-    const newPost = new Post(
-      new Date().getTime().toString(),
-      'profile1',
-      postTitle,
-      postMessage,
-      ''
-    );
-    this.communityService.addPost(newPost);
+    // const newPost = new Post(
+    //   new Date().getTime().toString(),
+    //   'profile1',
+    //   postTitle,
+    //   postMessage,
+    //   ''
+    // );
+    // this.communityService.addPost(newPost);
   }
 }

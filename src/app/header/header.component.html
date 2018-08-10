@@ -22,19 +22,17 @@
           <a
             routerLink="/signin"
             style="cursor: pointer"
-            *ngIf="!authService.isLoggedIn()"
-          >Sign In</a>
+          >
+            >Sign In</a>
         </li>
         <li>
           <a
             routerLink="/signup"
             style="cursor: pointer"
-            *ngIf="!authService.isLoggedIn()"
           >Sign Up</a>
         </li>
         <li>
           <a
-            *ngIf="authService.isLoggedIn()"
             href="javascript:void(0)"
             (click)="doLogout()"
           >Logout</a>

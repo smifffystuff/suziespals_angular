@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Post } from '../../../shared/post.model';
+import { Post } from '../../../models/post.model';
 
 @Component({
   selector: 'app-profile-post-list',
@@ -7,7 +7,8 @@ import { Post } from '../../../shared/post.model';
   styleUrls: ['./profile-post-list.component.css']
 })
 export class ProfilePostListComponent implements OnInit {
-  @Input() posts: Post[];
+  @Input()
+  posts: Post[];
 
   constructor() {}
 

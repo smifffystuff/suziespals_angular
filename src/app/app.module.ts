@@ -54,12 +54,12 @@ import { AuthInerceptor } from './shared/auth.interceptor';
     ProfilesService,
     CommunityService,
     AuthService,
-    AlertService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInerceptor,
-      multi: true
-    }
+    AlertService
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: AuthInerceptor,
+    //   multi: true
+    // }
   ],
   bootstrap: [AppComponent]
 })

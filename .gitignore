@@ -45,3 +45,5 @@ Thumbs.db
 aws_config.tf
 user_pool_info.ts
 sqlConfig.js
+src/app/auth/user_pool_info.orig.ts
+config/aws_config.json

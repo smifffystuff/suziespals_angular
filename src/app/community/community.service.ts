@@ -1,25 +1,32 @@
-import { Post } from '../shared/post.model';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
+import { Post } from '../models/post.model';
+import apiUrl from '../shared/api_endpoint';
+import { map } from 'rxjs/operators';
+
+@Injectable()
 export class CommunityService {
   postsChanged = new Subject<Post[]>();
 
-  private posts: Post[] = [
-    new Post(
-      'post1',
-      'profile1',
-      'My First Post',
-      'This is the first ever test post',
-      null
-    ),
-    new Post(
-      'post2',
-      'profile1',
-      'My Second Post',
-      'This is the second test post',
-      'https://upload.wikimedia.org/wikipedia/commons/2/26/Yellow_Labrador_puppy_%284165776031%29.jpg'
-    )
-  ];
+  private posts: Post[] = [];
+
+  constructor(private http: HttpClient) {
+    // this.http.get(apiUrl + '/posts').subscribe((posts: any[]) => {
+    //   this.posts = posts.map((p: any) => {
+    //     return new Post(
+    //       p.post_id,
+    //       p.pet_profile_id,
+    //       p.title,
+    //       p.message,
+    //       '',
+    //       p.posted_on
+    //     );
+    //   });
+    //   this.postsChanged.next(this.posts.slice());
+    // });
+  }
 
   getPosts(): Post[] {
     return this.posts.slice();
@@ -31,6 +38,7 @@ export class CommunityService {
   }
 
   getProfilePosts(profileId: string) {
-    return this.posts.filter(p => p.profileId === profileId);
+    return [];
+    // return this.posts.filter(p => p.profileId === profileId);
   }
 }

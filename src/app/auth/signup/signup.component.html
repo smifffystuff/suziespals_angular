@@ -130,6 +130,10 @@
           [disabled]="regForm.invalid"
         >{{confirming ? 'Confirm Account' : 'Sign Up'}}</button>
       </form>
+      <div
+        class="loader"
+        *ngIf="isLoading"
+      ></div>
     </div>
   </div>
 </div>

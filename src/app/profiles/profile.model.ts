@@ -1,4 +1,4 @@
-import { Post } from '../shared/post.model';
+import { Post } from '../models/post.model';
 
 export class Profile {
   constructor(

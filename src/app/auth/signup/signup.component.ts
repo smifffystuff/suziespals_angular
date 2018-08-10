@@ -11,6 +11,8 @@ import { AlertService } from '../../shared/alert/alert.service';
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnInit {
+  isLoading = false;
+  didFail = false;
   confirming = false;
   user = {
     name: '',
@@ -25,7 +27,20 @@ export class SignupComponent implements OnInit {
     private alertService: AlertService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.authService.authIsLoading.subscribe(
+      (isLoading: boolean) => (this.isLoading = isLoading)
+    );
+    this.authService.authDidFail.subscribe((fail: any) => {
+      this.didFail = fail !== null;
+      if (this.didFail) {
+        this.alertService.error(fail.message);
+      }
+    });
+    this.authService.authSignupSuccess.subscribe(
+      (success: boolean) => (this.confirming = success)
+    );
+  }
 
   onSignup(form: NgForm, isValid: boolean) {
     const email = form.value.email;
@@ -35,25 +50,9 @@ export class SignupComponent implements OnInit {
     const confirmationCode = form.value.confirmationCode;
 
     if (!this.confirming) {
-      this.authService.signupUser(name, email, password).subscribe(
-        data => {
-          this.alertService.success('Successfully registered');
-          this.confirming = true;
-        },
-        err => {
-          this.alertService.error(err.message);
-        }
-      );
+      this.authService.signupUser(name, email, password);
     } else {
-      this.authService.confirmAuthCode(email, confirmationCode).subscribe(
-        data => {
-          this.alertService.success('Email address successfully confirmed');
-          this.router.navigate(['signin']);
-        },
-        err => {
-          this.alertService.error(err.message);
-        }
-      );
+      this.authService.confirmAuthCode(email, confirmationCode);
     }
   }
 }

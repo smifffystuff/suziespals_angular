@@ -1,9 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Post } from '../shared/post.model';
+import { Post } from '../models/post.model';
 import { CommunityService } from './community.service';
 import { Subscription } from 'rxjs';
+
+import apiEndpoint from '../shared/api_endpoint';
 
 @Component({
   selector: 'app-community',
@@ -35,14 +37,9 @@ export class CommunityComponent implements OnInit, OnDestroy {
   onTestApi() {
     console.log('testing api');
 
-    this.httpClient
-      .post(
-        'https://6ejg5splnc.execute-api.us-east-1.amazonaws.com/dev/pet-profile',
-        {}
-      )
-      .subscribe(data => {
-        console.log(data);
-      });
+    this.httpClient.post(`${apiEndpoint}/pet-profile`, {}).subscribe(data => {
+      console.log(data);
+    });
   }
 }
 

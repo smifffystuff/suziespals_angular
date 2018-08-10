@@ -39,6 +39,8 @@ module "api" {
   source                        = "./modules/api"
   name                          = "${var.site_name}"
   create_pet_profile_lambda_arn = "${module.lambda.create_pet_profile_lambda_arn}"
+  get_all_posts_lambda_arn      = "${module.lambda.get_all_posts_lambda_arn}"
+  user_pool_id                  = "${module.cognito.user_pool_id}"
 }
 
 output "db_endpoint" {
@@ -51,4 +53,8 @@ output "user_pool_id" {
 
 output "app_client_id" {
   value = "${module.cognito.app_client_id}"
+}
+
+output "api_endpoint" {
+  value = "${module.api.api_endpoint}"
 }

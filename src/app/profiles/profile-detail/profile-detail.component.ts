@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Profile } from '../profile.model';
-import { Post } from '../../shared/post.model';
+import { Post } from '../../models/post.model';
 import { CommunityService } from '../../community/community.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { ProfilesService } from '../profiles.service';
@@ -11,8 +11,10 @@ import { ProfilesService } from '../profiles.service';
   styleUrls: ['./profile-detail.component.css']
 })
 export class ProfileDetailComponent implements OnInit {
-  @ViewChild('titleInput') titleInputRef: ElementRef;
-  @ViewChild('messageInput') messageInputRef: ElementRef;
+  @ViewChild('titleInput')
+  titleInputRef: ElementRef;
+  @ViewChild('messageInput')
+  messageInputRef: ElementRef;
 
   profile: Profile;
   id: string;
@@ -33,16 +35,16 @@ export class ProfileDetailComponent implements OnInit {
   }
 
   onAddPost() {
-    const postTitle = this.titleInputRef.nativeElement.value;
-    const postMessage = this.messageInputRef.nativeElement.value;
-    const newPost = new Post(
-      new Date().getTime().toString(),
-      this.profile.profileId,
-      postTitle,
-      postMessage,
-      ''
-    );
-    this.addingPost = false;
-    this.communityService.addPost(newPost);
+    // const postTitle = this.titleInputRef.nativeElement.value;
+    // const postMessage = this.messageInputRef.nativeElement.value;
+    // const newPost = new Post(
+    //   new Date().getTime().toString(),
+    //   this.profile.profileId,
+    //   postTitle,
+    //   postMessage,
+    //   ''
+    // );
+    // this.addingPost = false;
+    // this.communityService.addPost(newPost);
   }
 }

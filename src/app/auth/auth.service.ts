@@ -1,70 +1,79 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { Router } from '../../../node_modules/@angular/router';
+
 import {
   AuthenticationDetails,
   CognitoUserPool,
   CognitoUserAttribute,
-  CognitoUser
+  CognitoUser,
+  CognitoUserSession
 } from 'amazon-cognito-identity-js';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
 
 import poolData from './user_pool_info';
 
 const userPool = new CognitoUserPool(poolData);
 
 @Injectable()
-export class AuthService implements OnInit {
+export class AuthService {
+  authIsLoading = new BehaviorSubject<boolean>(false);
+  authDidFail = new BehaviorSubject<any>(null);
+  authSignupSuccess = new BehaviorSubject<boolean>(false);
+  authStatusChanged = new Subject<boolean>();
+  registeredUser: CognitoUser;
+
   cognitoUser: CognitoUser;
   token: string;
+  name = 'Guest';
 
-  constructor() {}
-
-  ngOnInit() {
-    this.cognitoUser = this.getAuthenticatedUser();
-    console.log(this.cognitoUser);
-  }
+  constructor(private router: Router) {}
 
   signupUser(name: string, email: string, password: string) {
+    this.authIsLoading.next(true);
     const dataName = {
       Name: 'name',
-      Value: 'name'
+      Value: name
     };
-    const nameAtt = [new CognitoUserAttribute(dataName)];
-
-    return Observable.create(observer => {
-      userPool.signUp(email, password, nameAtt, null, (err, result) => {
-        if (err) {
-          console.log('signUp Error', err);
-          observer.error(err);
-        } else {
-          this.cognitoUser = result.user;
-          console.log('signup success', result);
-          observer.next(result);
-          observer.complete();
-        }
-      });
+    const attrList: CognitoUserAttribute[] = [];
+    attrList.push(new CognitoUserAttribute(dataName));
+    console.log('sending signup');
+    userPool.signUp(email, password, attrList, null, (err, result) => {
+      if (err) {
+        this.authDidFail.next(err);
+        this.authIsLoading.next(false);
+        return;
+      }
+      this.authDidFail.next(null);
+      this.authIsLoading.next(false);
+      this.authSignupSuccess.next(true);
+      this.registeredUser = result.user;
     });
+    return;
   }
 
   confirmAuthCode(email: string, code: string) {
+    this.authIsLoading.next(true);
     const user = {
       Username: email,
       Pool: userPool
     };
-    return Observable.create(observer => {
-      const cognitoUser = new CognitoUser(user);
-      cognitoUser.confirmRegistration(code, true, function(err, result) {
-        if (err) {
-          console.log(err);
-          observer.error(err);
-        }
-        console.log('confirmAuthCode() success', result);
-        observer.next(result);
-        observer.complete();
-      });
+
+    const cognitoUser = new CognitoUser(user);
+    cognitoUser.confirmRegistration(code, true, (err, result) => {
+      if (err) {
+        console.log(err);
+        this.authDidFail.next(err);
+        this.authIsLoading.next(true);
+        return;
+      }
+      this.authDidFail.next(null);
+      this.authIsLoading.next(false);
+      this.router.navigate(['/signin']);
     });
   }
 
   signIn(email: string, password: string) {
+    this.authIsLoading.next(true);
     const authData = {
       Username: email,
       Password: password
@@ -77,50 +86,56 @@ export class AuthService implements OnInit {
       Pool: userPool
     };
     const cognitoUser = new CognitoUser(userData);
-
-    return Observable.create(observer => {
-      cognitoUser.authenticateUser(authenticaitonDetails, {
-        onSuccess: function(result) {
-          console.log(result);
-          observer.next(result);
-        },
-        onFailure: function(err) {
-          console.log(err);
-          observer.error(err);
-        }
-      });
+    const that = this;
+    cognitoUser.authenticateUser(authenticaitonDetails, {
+      onSuccess: function(result: CognitoUserSession) {
+        console.log('success', result);
+        that.authStatusChanged.next(true);
+        this.authDidFail.next(null);
+        that.authIsLoading.next(false);
+        console.log(result);
+      },
+      onFailure: function(err) {
+        console.log('failure', err);
+        this.authDidFail.next(err);
+        // that.authIsLoading.next(false);
+        // console.log(err);
+      }
     });
   }
-
-  isLoggedIn() {
-    return userPool.getCurrentUser() != null;
-  }
-
   getAuthenticatedUser() {
     return userPool.getCurrentUser();
   }
 
   logOut() {
     this.getAuthenticatedUser().signOut();
-    this.cognitoUser = null;
+    this.authStatusChanged.next(false);
   }
 
-  getToken() {
-    return new Promise<string>((resolve, reject) => {
-      const authenticatedUser = this.getAuthenticatedUser();
-      if (!authenticatedUser) {
-        resolve(null);
+  isAuthenticated(): Observable<boolean> {
+    const user = this.getAuthenticatedUser();
+    const obs = Observable.create(observer => {
+      if (!user) {
+        observer.next(false);
+      } else {
+        user.getSession((err, session) => {
+          if (err) {
+            observer.next(false);
+          } else {
+            if (session.isValid()) {
+              observer.next(true);
+            } else {
+              observer.next(false);
+            }
+          }
+        });
       }
-      authenticatedUser.getSession((err, session) => {
-        if (err) {
-          resolve(null);
-        }
-        if (session) {
-          resolve(session.getIdToken().getJwtToken());
-        } else {
-          resolve(null);
-        }
-      });
+      observer.complete();
     });
+    return obs;
+  }
+
+  initAuth() {
+    this.isAuthenticated().subscribe(auth => this.authStatusChanged.next(auth));
   }
 }
