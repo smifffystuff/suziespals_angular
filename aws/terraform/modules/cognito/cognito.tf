@@ -49,46 +49,11 @@ resource "aws_cognito_identity_pool" "ip" {
   }
 }
 
-resource "aws_cognito_identity_pool_roles_attachment" "auth" {
+resource "aws_cognito_identity_pool_roles_attachment" "roles" {
   identity_pool_id = "${aws_cognito_identity_pool.ip.id}"
 
-  # role_mapping {
-  #   identity_provider         = "cognito-idp.us-east-1.amazonaws.com/${aws_cognito_user_pool.pool.id}:aws_cognito_user_pool_client.client.id"
-  #   ambiguous_role_resolution = "AuthenticatedRole"
-  #   type                      = "Rules"
-
-
-  #   # mapping_rule {
-  #   #   claim      = "isAdmin"
-  #   #   match_type = "Equals"
-  #   #   role_arn   = "${var.ip_auth_arn}"
-  #   #   value      = "paid"
-  #   # }
-  # }
-
   roles {
-    "authenticated" = "${var.ip_auth_arn}"
-  }
-}
-
-resource "aws_cognito_identity_pool_roles_attachment" "unauth" {
-  identity_pool_id = "${aws_cognito_identity_pool.ip.id}"
-
-  # role_mapping {
-  #   identity_provider         = "cognito-idp.us-east-1.amazonaws.com/${aws_cognito_user_pool.pool.id}:aws_cognito_user_pool_client.client.id"
-  #   ambiguous_role_resolution = "AuthenticatedRole"
-  #   type                      = "Rules"
-
-
-  #   # mapping_rule {
-  #   #   claim      = "isAdmin"
-  #   #   match_type = "Equals"
-  #   #   role_arn   = "${var.ip_unauth_arn}"
-  #   #   value      = "paid"
-  #   # }
-  # }
-
-  roles {
+    "authenticated"   = "${var.ip_auth_arn}"
     "unauthenticated" = "${var.ip_unauth_arn}"
   }
 }
