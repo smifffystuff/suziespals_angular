@@ -55,15 +55,6 @@ EOF
   ]
 }
 
-resource "aws_lambda_permission" "posts_get" {
-  statement_id  = "AllowExecutionFromAPIGateway"
-  action        = "lambda:InvokeFunction"
-  function_name = "${var.get_all_posts_lambda_arn}"
-  principal     = "apigateway.amazonaws.com"
-
-  source_arn = "arn:aws:execute-api:us-east-1:240400571745:${aws_api_gateway_rest_api.api.id}/*/${aws_api_gateway_method.posts_get.http_method}${aws_api_gateway_resource.posts.path}"
-}
-
 // OPTIONS METHOD
 
 resource "aws_api_gateway_integration_response" "posts_options" {
@@ -118,4 +109,14 @@ resource "aws_api_gateway_method_response" "posts_options_200" {
   response_models = {
     "application/json" = "Empty"
   }
+}
+
+// Permissions
+resource "aws_lambda_permission" "posts_get" {
+  statement_id  = "posts_get"
+  action        = "lambda:InvokeFunction"
+  function_name = "${var.get_all_posts_lambda_arn}"
+  principal     = "apigateway.amazonaws.com"
+
+  source_arn = "arn:aws:execute-api:us-east-1:240400571745:${aws_api_gateway_rest_api.api.id}/*/${aws_api_gateway_method.posts_get.http_method}${aws_api_gateway_resource.posts.path}"
 }

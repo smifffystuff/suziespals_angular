@@ -27,6 +27,8 @@ import { AlertComponent } from './shared/alert/alert.component';
 import { AlertService } from './shared/alert/alert.service';
 import { ValidateEqualDirective } from './auth/validate-equal.directive';
 import { AuthInerceptor } from './shared/auth.interceptor';
+import { ProfileComponent } from './profile/profile.component';
+import { CreateProfileComponent } from './profile/create-profile/create-profile.component';
 
 @NgModule({
   declarations: [
@@ -47,19 +49,21 @@ import { AuthInerceptor } from './shared/auth.interceptor';
     ProfileStartComponent,
     ProfileEditComponent,
     AlertComponent,
-    ValidateEqualDirective
+    ValidateEqualDirective,
+    ProfileComponent,
+    CreateProfileComponent
   ],
   imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule],
   providers: [
     ProfilesService,
     CommunityService,
     AuthService,
-    AlertService
-    // {
-    //   provide: HTTP_INTERCEPTORS,
-    //   useClass: AuthInerceptor,
-    //   multi: true
-    // }
+    AlertService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInerceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

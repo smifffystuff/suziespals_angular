@@ -10,7 +10,10 @@
     <div class="navbar-default">
       <ul class="nav navbar-nav">
         <li routerLinkActive="active">
-          <a routerLink="/profiles">Profiles</a>
+          <a
+            *ngIf="isAuthenticated"
+            routerLink="/profiles"
+          >Profiles</a>
         </li>
         <li routerLinkActive="active">
           <a routerLink="/community">Community</a>
@@ -20,6 +23,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
           <a
+            *ngIf="!isAuthenticated"
             routerLink="/signin"
             style="cursor: pointer"
           >
@@ -27,12 +31,14 @@
         </li>
         <li>
           <a
+            *ngIf="!isAuthenticated"
             routerLink="/signup"
             style="cursor: pointer"
           >Sign Up</a>
         </li>
         <li>
           <a
+            *ngIf="isAuthenticated"
             href="javascript:void(0)"
             (click)="doLogout()"
           >Logout</a>
@@ -50,7 +56,10 @@
           </a>
           <ul class="dropdown-menu">
             <li>
-              <a style="cursor: pointer">Link</a>
+              <a
+                style="cursor: pointer"
+                routerLink="/profile"
+              >Edit Profile</a>
             </li>
             <li>
               <a style="cursor: pointer">Link</a>

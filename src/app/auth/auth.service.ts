@@ -10,6 +10,8 @@ import {
 } from 'amazon-cognito-identity-js';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
 
+import { CognitoIdentityCredentials, config } from 'aws-sdk';
+
 import poolData from './user_pool_info';
 
 const userPool = new CognitoUserPool(poolData);
@@ -63,7 +65,7 @@ export class AuthService {
       if (err) {
         console.log(err);
         this.authDidFail.next(err);
-        this.authIsLoading.next(true);
+        this.authIsLoading.next(false);
         return;
       }
       this.authDidFail.next(null);
@@ -91,14 +93,34 @@ export class AuthService {
       onSuccess: function(result: CognitoUserSession) {
         console.log('success', result);
         that.authStatusChanged.next(true);
-        this.authDidFail.next(null);
+        that.authDidFail.next(null);
         that.authIsLoading.next(false);
         console.log(result);
+        config.region = 'us-east-1';
+        const creds = new CognitoIdentityCredentials({
+          IdentityPoolId: 'us-east-1:e7fc7b80-b756-4da7-bcf3-dc2216d57042',
+          Logins: {
+            // Change the key below according to the specific region your user pool is in.
+            'cognito-idp.us-east-1.amazonaws.com/us-east-1_1014ZAZnv': result
+              .getIdToken()
+              .getJwtToken()
+          }
+        });
+        console.log('refreshing');
+        creds.refresh(error => {
+          if (error) {
+            console.error(error);
+          } else {
+            // Instantiate aws sdk service objects now that the credentials have been updated.
+            // example: var s3 = new AWS.S3();
+            console.log('Successfully logged!');
+          }
+        });
       },
       onFailure: function(err) {
         console.log('failure', err);
-        this.authDidFail.next(err);
-        // that.authIsLoading.next(false);
+        that.authDidFail.next(err);
+        that.authIsLoading.next(false);
         // console.log(err);
       }
     });
@@ -137,5 +159,37 @@ export class AuthService {
 
   initAuth() {
     this.isAuthenticated().subscribe(auth => this.authStatusChanged.next(auth));
+  }
+  getToken() {
+    return new Promise<string>((resolve, reject) => {
+      this.getAuthenticatedUser().getSession((err, session) => {
+        if (err) {
+          resolve(null);
+        }
+        console.log('BEFORE:', session.getIdToken().getJwtToken());
+        config.region = 'us-east-1';
+        const creds = new CognitoIdentityCredentials({
+          IdentityPoolId: 'us-east-1:e7fc7b80-b756-4da7-bcf3-dc2216d57042',
+          Logins: {
+            // Change the key below according to the specific region your user pool is in.
+            'cognito-idp.us-east-1.amazonaws.com/us-east-1_1014ZAZnv': session
+              .getIdToken()
+              .getJwtToken()
+          }
+        });
+        console.log('refreshing');
+        creds.refresh(error => {
+          if (error) {
+            console.error(error);
+          } else {
+            // Instantiate aws sdk service objects now that the credentials have been updated.
+            // example: var s3 = new AWS.S3();
+            console.log('Successfully logged!');
+            console.log('AFTER:', session.getIdToken().getJwtToken());
+          }
+        });
+        resolve(session.getIdToken().getJwtToken());
+      });
+    });
   }
 }

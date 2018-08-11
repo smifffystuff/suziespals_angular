@@ -1,0 +1,12 @@
+{
+  "name": "lambda",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "package": "npm run package --prefix createProfile && npm run package --prefix createPet && npm run package --prefix getAllPosts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

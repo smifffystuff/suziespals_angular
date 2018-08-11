@@ -1,0 +1,74 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+      <form
+        (ngSubmit)="onCreate(profileForm)"
+        #profileForm="ngForm"
+        novalidate
+      >
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            class="form-control"
+            [ngModel]="profile?.name"
+            required
+            minlength="3"
+            maxlength="25"
+            #name="ngModel"
+          >
+          <small [hidden]="name.valid || (!name.touched
+            &&
+            !profileForm.submitted)">
+            Name is required and should be between 3 and 25 characters.
+          </small>
+        </div>
+        <div class="form-group">
+          <label for="gender">Gender</label>
+          <input
+            type="text"
+            id="gender"
+            name="gender"
+            class="form-control"
+            [ngModel]="profile?.gender"
+            #gender="ngModel"
+          >
+        </div>
+        <div class="form-group">
+          <label for="location">Location</label>
+          <input
+            type="text"
+            id="location"
+            name="location"
+            class="form-control"
+            [ngModel]="profile?.location"
+            #location="ngModel"
+          >
+        </div>
+        <div class="form-group">
+          <label for="numberOfPets">Number of pets</label>
+          <input
+            type="number"
+            id="numberOfPets"
+            name="numberOfPets"
+            class="form-control"
+            [ngModel]="profile?.numberOfPets"
+            #numberOfPets="ngModel"
+          >
+        </div>
+
+        <button
+          class="btn btn-primary"
+          type="submit"
+          [disabled]="profileForm.invalid"
+        >Create</button>
+      </form>
+      <div
+        class="loader"
+        *ngIf="isLoading"
+      ></div>
+    </div>
+  </div>
+</div>

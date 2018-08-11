@@ -6,7 +6,7 @@
   "scripts": {
     "package": "npm run prep && npm run zip && npm run restore",
     "prep": "rm -fr node_modules/ && npm install --production",
-    "zip": "bestzip ../../terraform/modules/lambda/zips/createPetProfile.zip *.js node_modules",
+    "zip": "bestzip ../../terraform/modules/lambda/zips/createPet.zip *.js node_modules",
     "restore": "rm -fr node_modules/ && npm install"
   },
   "keywords": [],

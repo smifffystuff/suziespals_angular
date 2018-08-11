@@ -1,3 +1,4 @@
+import { CreateProfileComponent } from './profile/create-profile/create-profile.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ProfilesComponent } from './profiles/profiles.component';
@@ -7,11 +8,12 @@ import { ProfileDetailComponent } from './profiles/profile-detail/profile-detail
 import { ProfileEditComponent } from './profiles/profile-edit/profile-edit.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { SigninComponent } from './auth/signin/signin.component';
+import { ProfileComponent } from './profile/profile.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/community', pathMatch: 'full' },
   {
-    path: 'profiles',
+    path: 'pets',
     component: ProfilesComponent,
     children: [
       { path: '', component: ProfileStartComponent },
@@ -22,7 +24,9 @@ const appRoutes: Routes = [
   },
   { path: 'community', component: CommunityComponent },
   { path: 'signup', component: SignupComponent },
-  { path: 'signin', component: SigninComponent }
+  { path: 'signin', component: SigninComponent },
+  { path: 'profile', component: ProfileComponent },
+  { path: 'create-profile', component: CreateProfileComponent }
 ];
 
 @NgModule({
