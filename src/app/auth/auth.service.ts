@@ -13,6 +13,7 @@ import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { CognitoIdentityCredentials, config } from 'aws-sdk';
 
 import poolData from './user_pool_info';
+import idPoolId from '../shared/id_pool_id';
 
 const userPool = new CognitoUserPool(poolData);
 
@@ -29,15 +30,42 @@ export class AuthService {
   name = 'Guest';
 
   constructor(private router: Router) {}
-
-  signupUser(name: string, email: string, password: string) {
+  name, email,location, gender, numberOfPets, password
+  signupUser(name: string, email: string, location: string, gender: string, numberOfPets: number, password: string) {
     this.authIsLoading.next(true);
     const dataName = {
       Name: 'name',
       Value: name
     };
-    const attrList: CognitoUserAttribute[] = [];
-    attrList.push(new CognitoUserAttribute(dataName));
+    const attrList: CognitoUserAttribute[] = [
+      new CognitoUserAttribute({
+        Name: 'name',
+        Value: name
+      }),
+      new CognitoUserAttribute({
+        Name: 'custom:location',
+        Value: location
+      }),
+      new CognitoUserAttribute({
+        Name: 'custom:gender',
+        Value: gender
+      }),
+      new CognitoUserAttribute({
+        Name: 'custom:numberOfPets',
+        Value: numberOfPets
+      }),
+      new CognitoUserAttribute({
+        Name: 'custom:joined',
+        Value: new Date().toISOString();
+      })
+yes
+      yyyy-mm-dd hh:mm:ss timezone
+    ];
+    console.log(attrList);
+    // attrList.push(new CognitoUserAttribute({
+    //   Name: 'name',
+    //   Value: name
+    // }));
     console.log('sending signup');
     userPool.signUp(email, password, attrList, null, (err, result) => {
       if (err) {
@@ -97,13 +125,14 @@ export class AuthService {
         that.authIsLoading.next(false);
         console.log(result);
         config.region = 'us-east-1';
+        const loginKey = `cognito-idp.us-east-1.amazonaws.com/${
+          poolData.UserPoolId
+        }`;
         const creds = new CognitoIdentityCredentials({
-          IdentityPoolId: 'us-east-1:e7fc7b80-b756-4da7-bcf3-dc2216d57042',
+          IdentityPoolId: idPoolId,
           Logins: {
             // Change the key below according to the specific region your user pool is in.
-            'cognito-idp.us-east-1.amazonaws.com/us-east-1_1014ZAZnv': result
-              .getIdToken()
-              .getJwtToken()
+            [loginKey]: result.getIdToken().getJwtToken()
           }
         });
         console.log('refreshing');
@@ -168,13 +197,14 @@ export class AuthService {
         }
         console.log('BEFORE:', session.getIdToken().getJwtToken());
         config.region = 'us-east-1';
+        const loginKey = `cognito-idp.us-east-1.amazonaws.com/${
+          poolData.UserPoolId
+        }`;
         const creds = new CognitoIdentityCredentials({
-          IdentityPoolId: 'us-east-1:e7fc7b80-b756-4da7-bcf3-dc2216d57042',
+          IdentityPoolId: idPoolId,
           Logins: {
             // Change the key below according to the specific region your user pool is in.
-            'cognito-idp.us-east-1.amazonaws.com/us-east-1_1014ZAZnv': session
-              .getIdToken()
-              .getJwtToken()
+            [loginKey]: session.getIdToken().getJwtToken()
           }
         });
         console.log('refreshing');

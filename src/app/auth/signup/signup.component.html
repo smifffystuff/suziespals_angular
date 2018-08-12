@@ -6,6 +6,25 @@
         #regForm="ngForm"
         novalidate
       >
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          class="form-control"
+          [ngModel]="user.email"
+          required
+          email
+          #email="ngModel"
+        >
+        <small [hidden]="email.valid || (!email.touched
+          &&
+          !regForm.submitted)">
+          Email is required and format should be
+          <i>john@doe.com</i>.
+        </small>
+      </div>
         <div
           class="form-group"
           *ngIf="!confirming"
@@ -22,29 +41,61 @@
             maxlength="25"
             #name="ngModel"
           >
+          
           <small [hidden]="name.valid || (!name.touched
             &&
             !regForm.submitted)">
             Name is required and should be between 3 and 25 characters.
           </small>
         </div>
-        <div class="form-group">
-          <label for="email">Email</label>
+        <div
+          class="form-group"
+          *ngIf="!confirming"
+        >
+          <label for="gender">Gender</label>
           <input
-            type="email"
-            id="email"
-            name="email"
+            type="text"
+            id="gender"
+            name="gender"
             class="form-control"
-            [ngModel]="user.email"
-            required
-            email
-            #email="ngModel"
+            [ngModel]="user.gender"
+            #gender="ngModel"
           >
-          <small [hidden]="email.valid || (!email.touched
+        </div>
+        <div
+          class="form-group"
+          *ngIf="!confirming"
+        >
+          <label for="location">Country</label>
+          <input
+            type="text"
+            id="location"
+            name="location"
+            class="form-control"
+            [ngModel]="user.location"
+            #location="ngModel"
+          >
+        
+        </div>
+        <div
+          class="form-group"
+          *ngIf="!confirming"
+        >
+          <label for="numberOfPets">Number of pets</label>
+          <input
+            type="text"
+            id="numberOfPets"
+            name="numberOfPets"
+            class="form-control"
+            [ngModel]="user.numberOfPets"
+            required
+            #numberOfPets="ngModel"
+          >
+          
+          <small [hidden]="numberOfPets.valid || (!numberOfPets.touched
             &&
             !regForm.submitted)">
-            Email is required and format should be
-            <i>john@doe.com</i>.
+            Please tell us the number of pets you have even if it is 0
           </small>
         </div>
         <div

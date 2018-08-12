@@ -11,16 +11,13 @@ exports.handler = (event, context, callback) => {
       console.log('connection established');
       connection = conn;
       return connection.query(
-        `REPLACE INTO profile (userId, name, gender, location, numberOfpets)
-        VALUES ('${event.userId}', '${event.name}', '${event.gender}', '${
-          event.location
-        }', '${event.numberOfPets}')`
+        `SELECT * FROM profile WHERE userId = '${event.userId}'`
       );
     })
     .then(result => {
       console.log(result);
       connection.end();
-      callback(null, event);
+      callback(null, result);
     })
     .catch(err => {
       console.log(err);

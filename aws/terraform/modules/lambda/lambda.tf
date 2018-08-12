@@ -30,6 +30,20 @@ output "create_profile_lambda_arn" {
   value = "${module.create_profile.arn}"
 }
 
+module "get_profile" {
+  source = "./function"
+
+  function_name    = "${var.name}_api_getProfile"
+  file_name        = "${path.module}/zips/getProfile.zip"
+  iam_role_arn     = "${var.iam_role_arn}"
+  source_code_hash = "${base64sha256(file("${path.module}/zips/getProfile.zip"))}"
+  subnet_ids       = "${data.aws_subnet_ids.subnets.ids}"
+}
+
+output "get_profile_lambda_arn" {
+  value = "${module.get_profile.arn}"
+}
+
 module "get_all_posts" {
   source = "./function"
 

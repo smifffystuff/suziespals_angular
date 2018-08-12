@@ -15,8 +15,11 @@ export class SignupComponent implements OnInit {
   didFail = false;
   confirming = false;
   user = {
-    name: '',
     email: '',
+    name: '',
+    gender: '',
+    location: '',
+    numberOfPets: 0,
     password: '',
     password2: ''
   };
@@ -43,14 +46,18 @@ export class SignupComponent implements OnInit {
   }
 
   onSignup(form: NgForm, isValid: boolean) {
+    console.log(this.user);
     const email = form.value.email;
     const name = form.value.name;
+    const gender = form.value.gender;
+    const location = form.value.location;
+    const numberOfPets = form.value.numberOfPets;
     const password = form.value.password;
     const password2 = form.value.password2;
     const confirmationCode = form.value.confirmationCode;
 
     if (!this.confirming) {
-      this.authService.signupUser(name, email, password);
+      this.authService.signupUser(name, email,location, gender, numberOfPets, password);
     } else {
       this.authService.confirmAuthCode(email, confirmationCode);
     }

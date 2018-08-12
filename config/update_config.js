@@ -18,3 +18,8 @@ const apiEndpoint = `const apiEndpoint = '${awsConfig.api_endpoint.value}';
 export default apiEndpoint;
 `;
 fs.writeFileSync('../src/app/shared/api_endpoint.ts', apiEndpoint);
+
+const idPoolId = `const idPoolId = '${awsConfig.identity_pool_id.value}';
+export default idPoolId;
+`;
+fs.writeFileSync('../src/app/shared/id_pool_id.ts', idPoolId);

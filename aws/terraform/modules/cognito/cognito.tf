@@ -9,16 +9,58 @@ resource "aws_cognito_user_pool" "pool" {
     "email",
   ]
 
-  schema = [{
+  schema = [
+    {
     attribute_data_type = "String"
     name                = "name"
     required            = true
+    mutable = true
 
     string_attribute_constraints {
       min_length = 0
       max_length = 50
-    }
-  }]
+      } 
+    },
+    {
+    attribute_data_type = "String"
+    name                = "gender"
+    required            = false
+    mutable = true
+
+   string_attribute_constraints {
+      min_length = 0
+      max_length = 10
+      } 
+    },
+    {
+    attribute_data_type = "String"
+    name                = "location"
+    required            = false
+    mutable = true
+
+    string_attribute_constraints {
+      min_length = 0
+      max_length = 25
+      } 
+    },
+    {
+    attribute_data_type = "Number"
+    name                = "numberOfPets"
+    required            = false
+    mutable = true
+
+    number_attribute_constraints {
+      min_value = 0
+      max_value = 10
+      } 
+    },
+    {
+    attribute_data_type = "DateTime"
+    name                = "joined"
+    required            = false
+
+    }     
+  ]
 
   password_policy = {
     require_lowercase = true

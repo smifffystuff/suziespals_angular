@@ -47,3 +47,9 @@ user_pool_info.ts
 sqlConfig.js
 src/app/auth/user_pool_info.orig.ts
 config/aws_config.json
+src/app/shared/id_pool_id.ts
+*.zip
+*.tfstate.*
+terraform.tfstate
+.terraform.tfstate.lock.info
+aws/terraform/terraform.tfstate

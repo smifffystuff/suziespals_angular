@@ -28,7 +28,7 @@ export class AuthInerceptor implements HttpInterceptor {
             })
           : req.clone();
         console.log(req);
-        console.log(modifiedReq);
+        console.log(modifiedReq.headers.get('Authorization'));
         return next.handle(modifiedReq);
       })
     );

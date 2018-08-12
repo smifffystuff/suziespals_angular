@@ -20,7 +20,7 @@ export class ProfileService {
     console.log(profile);
 
     this.profile = profile;
-    this.http.post(api_endpoint + '/profile', profile).subscribe(
+    this.http.post(api_endpoint + '/profiles', profile).subscribe(
       result => {
         console.log(result);
         // this.dataLoadFailed.next(false);
