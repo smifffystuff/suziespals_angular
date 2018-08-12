@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router } from '../../../node_modules/@angular/router';
+import { Router } from '@angular/router';
 
 import {
   AuthenticationDetails,
@@ -9,11 +9,12 @@ import {
   CognitoUserSession
 } from 'amazon-cognito-identity-js';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
-
 import { CognitoIdentityCredentials, config } from 'aws-sdk';
+import df from 'dateformat';
 
 import poolData from './user_pool_info';
 import idPoolId from '../shared/id_pool_id';
+import { Profile } from '../models/profile.model';
 
 const userPool = new CognitoUserPool(poolData);
 
@@ -23,6 +24,7 @@ export class AuthService {
   authDidFail = new BehaviorSubject<any>(null);
   authSignupSuccess = new BehaviorSubject<boolean>(false);
   authStatusChanged = new Subject<boolean>();
+  profileChanged = new Subject<Profile>();
   registeredUser: CognitoUser;
 
   cognitoUser: CognitoUser;
@@ -30,9 +32,17 @@ export class AuthService {
   name = 'Guest';
 
   constructor(private router: Router) {}
-  name, email,location, gender, numberOfPets, password
-  signupUser(name: string, email: string, location: string, gender: string, numberOfPets: number, password: string) {
+
+  signupUser(
+    name: string,
+    email: string,
+    location: string,
+    gender: string,
+    numberOfPets: number,
+    password: string
+  ) {
     this.authIsLoading.next(true);
+    const now = new Date();
     const dataName = {
       Name: 'name',
       Value: name
@@ -47,19 +57,21 @@ export class AuthService {
         Value: location
       }),
       new CognitoUserAttribute({
-        Name: 'custom:gender',
+        Name: 'gender',
         Value: gender
       }),
       new CognitoUserAttribute({
         Name: 'custom:numberOfPets',
-        Value: numberOfPets
+        Value: numberOfPets + ''
       }),
       new CognitoUserAttribute({
         Name: 'custom:joined',
-        Value: new Date().toISOString();
+        Value:
+          df(
+            new Date(now.getTime() + now.getTimezoneOffset() * 60000),
+            'yyyy-mm-dd HH:MM:ss'
+          ) + ' UTC'
       })
-yes
-      yyyy-mm-dd hh:mm:ss timezone
     ];
     console.log(attrList);
     // attrList.push(new CognitoUserAttribute({
@@ -117,6 +129,7 @@ yes
     };
     const cognitoUser = new CognitoUser(userData);
     const that = this;
+    this.cognitoUser = cognitoUser;
     cognitoUser.authenticateUser(authenticaitonDetails, {
       onSuccess: function(result: CognitoUserSession) {
         console.log('success', result);
@@ -152,6 +165,33 @@ yes
         that.authIsLoading.next(false);
         // console.log(err);
       }
+    });
+  }
+
+  getProfile() {
+    console.log('GET PROFILE');
+    const cognitoUser = this.getAuthenticatedUser();
+    const that = this;
+    cognitoUser.getSession(session => {
+      const attributes: any = {};
+      cognitoUser.getUserAttributes(function(err, result) {
+        if (err) {
+          alert(err.message || JSON.stringify(err));
+          return;
+        }
+        result.forEach(r => {
+          attributes[r.getName()] = r.getValue();
+        });
+        console.log(attributes);
+        const profile = new Profile(
+          attributes.sub,
+          attributes.name,
+          attributes.gender,
+          attributes['custom:location'],
+          attributes['custom:numberOfPets']
+        );
+        that.profileChanged.next(profile);
+      });
     });
   }
   getAuthenticatedUser() {

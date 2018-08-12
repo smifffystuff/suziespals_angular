@@ -3,16 +3,6 @@
 USE `suziespals`;
 
 
-DROP TABLE IF EXISTS `profile`;
-CREATE TABLE `profile` (
-  `userId` VARCHAR(50) NOT NULL,
-  `name` VARCHAR(50) NOT NULL,
-  `gender` VARCHAR(6) NULL,
-  `location` VARCHAR(50) NULL,
-  `numberOfPets` INT NULL,
-  PRIMARY KEY (`userId`));
-
-
 DROP TABLE IF EXISTS `pet`;
 CREATE TABLE `pet` (
   `petId` VARCHAR(50) NOT NULL,

@@ -6,7 +6,6 @@ export class Profile {
     public name: string,
     public gender: string,
     public location: string,
-    public numberOfPets: number,
-    public pets: Pet[]
+    public numberOfPets: number
   ) {}
 }

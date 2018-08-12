@@ -20,9 +20,6 @@ resource "aws_api_gateway_rest_api" "api" {
 
 resource "aws_api_gateway_deployment" "api" {
   depends_on = [
-    "aws_api_gateway_integration.profile_post",
-    "aws_api_gateway_integration.profile_get",
-    "aws_api_gateway_integration.profile_options",
     "aws_api_gateway_integration.pets_post",
     "aws_api_gateway_integration.pets_options",
     "aws_api_gateway_integration.posts_get",

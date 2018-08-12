@@ -42,8 +42,6 @@ module "api" {
   source                    = "./modules/api"
   name                      = "${var.site_name}"
   create_pet_lambda_arn     = "${module.lambda.create_pet_lambda_arn}"
-  create_profile_lambda_arn = "${module.lambda.create_profile_lambda_arn}"
-  get_profile_lambda_arn    = "${module.lambda.get_profile_lambda_arn}"
   get_all_posts_lambda_arn  = "${module.lambda.get_all_posts_lambda_arn}"
   user_pool_id              = "${module.cognito.user_pool_id}"
 }

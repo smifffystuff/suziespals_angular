@@ -8,18 +8,6 @@
     </div>
 
     <div class="navbar-default">
-      <ul class="nav navbar-nav">
-        <li routerLinkActive="active">
-          <a
-            *ngIf="isAuthenticated"
-            routerLink="/profiles"
-          >Profiles</a>
-        </li>
-        <li routerLinkActive="active">
-          <a routerLink="/community">Community</a>
-        </li>
-
-      </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
           <a
@@ -27,7 +15,7 @@
             routerLink="/signin"
             style="cursor: pointer"
           >
-            >Sign In</a>
+            Sign In</a>
         </li>
         <li>
           <a
@@ -44,6 +32,7 @@
           >Logout</a>
         </li>
         <li
+          *ngIf="isAuthenticated"
           class="dropdown"
           appDropdown
         >
@@ -51,18 +40,21 @@
             style="cursor: pointer"
             class="dropdwon-toggle"
             role="button"
-          >Manage
+          >Manage Account
             <span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
             <li>
               <a
                 style="cursor: pointer"
-                routerLink="/profile"
+                routerLink="/edit-profile"
               >Edit Profile</a>
             </li>
             <li>
-              <a style="cursor: pointer">Link</a>
+              <a
+                style="cursor: pointer"
+                routerLink="/pets"
+              >Manage Pets</a>
             </li>
           </ul>
         </li>

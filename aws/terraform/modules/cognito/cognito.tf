@@ -19,7 +19,7 @@ resource "aws_cognito_user_pool" "pool" {
     string_attribute_constraints {
       min_length = 0
       max_length = 50
-      } 
+      }
     },
     {
     attribute_data_type = "String"
@@ -30,7 +30,7 @@ resource "aws_cognito_user_pool" "pool" {
    string_attribute_constraints {
       min_length = 0
       max_length = 10
-      } 
+      }
     },
     {
     attribute_data_type = "String"
@@ -41,7 +41,7 @@ resource "aws_cognito_user_pool" "pool" {
     string_attribute_constraints {
       min_length = 0
       max_length = 25
-      } 
+      }
     },
     {
     attribute_data_type = "Number"
@@ -52,14 +52,14 @@ resource "aws_cognito_user_pool" "pool" {
     number_attribute_constraints {
       min_value = 0
       max_value = 10
-      } 
+      }
     },
     {
     attribute_data_type = "DateTime"
     name                = "joined"
     required            = false
 
-    }     
+    }
   ]
 
   password_policy = {

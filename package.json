@@ -24,6 +24,7 @@
     "aws-sdk": "^2.291.0",
     "bootstrap": "^3.3.7",
     "core-js": "^2.5.4",
+    "dateformat": "^3.0.3",
     "rxjs": "^6.0.0",
     "zone.js": "~0.8.26"
   },
