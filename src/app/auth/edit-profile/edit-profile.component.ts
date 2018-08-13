@@ -4,6 +4,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { Profile } from '../../models/profile.model';
 import { AuthService } from '../auth.service';
+import { AlertService } from '../../shared/alert/alert.service';
 
 @Component({
   selector: 'app-edit-profile',
@@ -15,7 +16,10 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   isLoading: false;
   profileChangedSub: Subscription;
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private alertService: AlertService
+  ) {}
 
   ngOnInit() {
     this.profileChangedSub = this.authService.profileChanged.subscribe(
@@ -32,14 +36,25 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   }
 
   onCreate(form: NgForm) {
-    const newProfile = new Profile(
-      '123456',
+    if (+form.value.numberOfPets > 10 || +form.value.numberOfPets < 0) {
+      this.alertService.warn(
+        'Number of pets must be greater than 0 and 10 or less'
+      );
+      return;
+    }
+    const editedProfile = new Profile(
       form.value.name,
       form.value.gender,
       form.value.location,
       form.value.numberOfPets
     );
 
-    // this.authService.editProfile(newProfile);
+    this.authService.editProfile(editedProfile).subscribe((result: any) => {
+      if (result.success) {
+        this.alertService.success(result.msg);
+      } else {
+        this.alertService.error(result.msg);
+      }
+    });
   }
 }

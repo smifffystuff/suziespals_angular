@@ -1,3 +1,4 @@
+import { SharedService } from './../../shared/shared.service';
 import { Component, OnInit } from '@angular/core';
 import { NgForm, ValidatorFn, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -27,11 +28,15 @@ export class SignupComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private sharedService: SharedService
   ) {}
 
   ngOnInit() {
-    this.authService.authIsLoading.subscribe(
+    // this.authService.authIsLoading.subscribe(
+    //   (isLoading: boolean) => (this.isLoading = isLoading)
+    // );
+    this.sharedService.isLoading.subscribe(
       (isLoading: boolean) => (this.isLoading = isLoading)
     );
     this.authService.authDidFail.subscribe((fail: any) => {
@@ -45,7 +50,7 @@ export class SignupComponent implements OnInit {
     );
   }
 
-  onSignup(form: NgForm, isValid: boolean) {
+  onSignup(form: NgForm) {
     console.log(this.user);
     const email = form.value.email;
     const name = form.value.name;
@@ -57,7 +62,14 @@ export class SignupComponent implements OnInit {
     const confirmationCode = form.value.confirmationCode;
 
     if (!this.confirming) {
-      this.authService.signupUser(name, email,location, gender, numberOfPets, password);
+      this.authService.signupUser(
+        name,
+        email,
+        location,
+        gender,
+        numberOfPets,
+        password
+      );
     } else {
       this.authService.confirmAuthCode(email, confirmationCode);
     }

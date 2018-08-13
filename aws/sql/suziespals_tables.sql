@@ -5,7 +5,7 @@ USE `suziespals`;
 
 DROP TABLE IF EXISTS `pet`;
 CREATE TABLE `pet` (
-  `petId` VARCHAR(50) NOT NULL,
+  `petId` INT NOT NULL AUTO_INCREMENT,
   `userId` VARCHAR(50) NOT NULL,
   `name` VARCHAR(50) NOT NULL,
   `animalType` VARCHAR(15),

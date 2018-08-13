@@ -1,3 +1,4 @@
+import { SharedService } from './../shared/shared.service';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -31,7 +32,7 @@ export class AuthService {
   token: string;
   name = 'Guest';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private sharedService: SharedService) {}
 
   signupUser(
     name: string,
@@ -41,7 +42,8 @@ export class AuthService {
     numberOfPets: number,
     password: string
   ) {
-    this.authIsLoading.next(true);
+    this.sharedService.isLoading.next(true);
+    // this.authIsLoading.next(true);
     const now = new Date();
     const dataName = {
       Name: 'name',
@@ -82,11 +84,13 @@ export class AuthService {
     userPool.signUp(email, password, attrList, null, (err, result) => {
       if (err) {
         this.authDidFail.next(err);
-        this.authIsLoading.next(false);
+        this.sharedService.isLoading.next(false);
+        // this.authIsLoading.next(false);
         return;
       }
       this.authDidFail.next(null);
-      this.authIsLoading.next(false);
+      this.sharedService.isLoading.next(false);
+      // this.authIsLoading.next(false);
       this.authSignupSuccess.next(true);
       this.registeredUser = result.user;
     });
@@ -94,7 +98,8 @@ export class AuthService {
   }
 
   confirmAuthCode(email: string, code: string) {
-    this.authIsLoading.next(true);
+    this.sharedService.isLoading.next(true);
+    // this.authIsLoading.next(true);
     const user = {
       Username: email,
       Pool: userPool
@@ -105,17 +110,20 @@ export class AuthService {
       if (err) {
         console.log(err);
         this.authDidFail.next(err);
-        this.authIsLoading.next(false);
+        this.sharedService.isLoading.next(false);
+        // this.authIsLoading.next(false);
         return;
       }
       this.authDidFail.next(null);
-      this.authIsLoading.next(false);
+      this.sharedService.isLoading.next(false);
+      // this.authIsLoading.next(false);
       this.router.navigate(['/signin']);
     });
   }
 
   signIn(email: string, password: string) {
-    this.authIsLoading.next(true);
+    this.sharedService.isLoading.next(true);
+    // this.authIsLoading.next(true);
     const authData = {
       Username: email,
       Password: password
@@ -135,7 +143,8 @@ export class AuthService {
         console.log('success', result);
         that.authStatusChanged.next(true);
         that.authDidFail.next(null);
-        that.authIsLoading.next(false);
+        this.sharedService.isLoading.next(false);
+        // that.authIsLoading.next(false);
         console.log(result);
         config.region = 'us-east-1';
         const loginKey = `cognito-idp.us-east-1.amazonaws.com/${
@@ -162,7 +171,8 @@ export class AuthService {
       onFailure: function(err) {
         console.log('failure', err);
         that.authDidFail.next(err);
-        that.authIsLoading.next(false);
+        this.sharedService.isLoading.next(false);
+        // that.authIsLoading.next(false);
         // console.log(err);
       }
     });
@@ -184,7 +194,6 @@ export class AuthService {
         });
         console.log(attributes);
         const profile = new Profile(
-          attributes.sub,
           attributes.name,
           attributes.gender,
           attributes['custom:location'],
@@ -194,6 +203,57 @@ export class AuthService {
       });
     });
   }
+
+  editProfile(profile: Profile): Observable<{ boolean; string }> {
+    const cognitoUser = this.getAuthenticatedUser();
+    const obs = Observable.create(observer => {
+      cognitoUser.getSession(session => {
+        const attrList = [];
+        attrList.push(
+          new CognitoUserAttribute({
+            Name: 'name',
+            Value: profile.name
+          })
+        );
+
+        attrList.push(
+          new CognitoUserAttribute({
+            Name: 'custom:location',
+            Value: profile.location
+          })
+        );
+
+        attrList.push(
+          new CognitoUserAttribute({
+            Name: 'gender',
+            Value: profile.gender
+          })
+        );
+
+        attrList.push(
+          new CognitoUserAttribute({
+            Name: 'custom:numberOfPets',
+            Value: profile.numberOfPets + ''
+          })
+        );
+
+        cognitoUser.updateAttributes(attrList, (err, result) => {
+          if (err) {
+            console.log(err);
+            observer.next({ success: false, msg: 'Unable to update profile' });
+          } else {
+            observer.next({
+              success: true,
+              msg: 'Profile successfully updated!'
+            });
+          }
+          observer.complete();
+        });
+      });
+    });
+    return obs;
+  }
+
   getAuthenticatedUser() {
     return userPool.getCurrentUser();
   }

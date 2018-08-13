@@ -8,3 +8,12 @@ terraform output -json > ../../config/aws_config.json
 
 cd ../../config/
 node update_config.js
+
+cd ../
+
+npm run build
+
+aws s3 rm --region us-east-1 --profile terraform --recursive s3://suziespals.co.uk/
+
+aws s3 cp --region us-east-1 --profile terraform --recursive ./dist/ s3://suziespals.co.uk/
+

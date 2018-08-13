@@ -12,6 +12,7 @@ resource "aws_api_gateway_method" "pets_post" {
   http_method   = "POST"
   authorization = "COGNITO_USER_POOLS"
   authorizer_id = "${aws_api_gateway_authorizer.auth.id}"
+
 }
 
 resource "aws_api_gateway_integration" "pets_post" {
@@ -21,6 +22,23 @@ resource "aws_api_gateway_integration" "pets_post" {
   integration_http_method = "POST"
   type                    = "AWS"
   uri                     = "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${var.create_pet_lambda_arn}/invocations"
+
+  request_templates {
+    "application/json" = <<EOF
+{
+   #set($inputRoot = $input.path('$'))
+   {
+     "userId": "$context.authorizer.claims.sub",
+     "name": "$inputRoot.name",
+     "animalType": "$inputRoot.animalType",
+     "breed": "$inputRoot.breed",
+     "age": "$inputRoot.age",
+     "gender": "$inputRoot.gender",
+      "bio": "$inputRoot.bio"
+  }
+}
+EOF
+  }
 }
 
 resource "aws_api_gateway_method_response" "pets_post_200" {

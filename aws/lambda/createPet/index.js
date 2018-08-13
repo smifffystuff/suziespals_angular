@@ -13,18 +13,21 @@ exports.handler = (event, context, callback) => {
       console.log('connection established');
       connection = conn;
       return connection.query(
-        `INSERT INTO pet_profile (userId, petName, typeOfAnimal, breed, age, gender) VALUES ('user1', 'Suzie', 'Dog', 'Labradore', '4 months', 'Female')`
+        `INSERT INTO pet (userId, name, animalType, breed, age, gender, bio) VALUES (
+          '${evemt.userId}','${event.name}', '${event.animalType}', '${
+          event.breed
+        }','${event.age}',
+          '${event.gender}', '${event.bio}'
+        )`
       );
     })
     .then(result => {
       console.log(result);
       return connection.query(
-        'select * from pet_profile where profileId = LAST_INSERT_ID()'
+        'select * from pet where petId = LAST_INSERT_ID()'
       );
     })
     .then(result => {
-      console.log(result);
-      result.forEach(r => console.log(r.petName));
       connection.end();
       callback(null, result);
     })

@@ -9,6 +9,23 @@ module "sg" {
   sg_name = "${var.site_name}"
 }
 
+module "s3" {
+  source = "./modules/s3"
+
+  site_name = "${var.site_name}"
+}
+
+module "dns" {
+  source = "./modules/route53"
+
+  site_name = "${var.site_name}"
+  s3_main_host_name = "${module.s3.main_web_endpoint}"
+  s3_main_zone_id = "${module.s3.main_hosted_zone_id}"
+  s3_www_host_name = "${module.s3.www_web_endpoint}"
+  s3_www_zone_id = "${module.s3.www_hosted_zone_id}"
+}
+
+
 module "iam" {
   source = "./modules/iam"
   name   = "${var.site_name}"
@@ -46,6 +63,11 @@ module "api" {
   user_pool_id              = "${module.cognito.user_pool_id}"
 }
 
+module "cloudfront" {
+  source = "./modules/cloudfront"
+
+}
+
 output "db_endpoint" {
   value = "${module.rds.db_endpoint}"
 }
@@ -65,3 +87,9 @@ output "api_endpoint" {
 output "identity_pool_id" {
   value = "${module.cognito.ip_id}"
 }
+
+output "cert_arn" {
+  value = "${module.cloudfront.cert_arn}"
+}
+
+

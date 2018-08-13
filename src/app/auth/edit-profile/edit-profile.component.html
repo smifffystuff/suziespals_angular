@@ -54,16 +54,18 @@
             id="numberOfPets"
             name="numberOfPets"
             class="form-control"
+            min="0"
+            max="10"
             [ngModel]="profile?.numberOfPets"
             #numberOfPets="ngModel"
           >
-        </div>
 
+        </div>
         <button
           class="btn btn-primary"
           type="submit"
           [disabled]="profileForm.invalid"
-        >Create</button>
+        >Confirm Changes</button>
       </form>
       <div
         class="loader"

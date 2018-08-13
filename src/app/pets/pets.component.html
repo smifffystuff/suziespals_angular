@@ -1,3 +1,15 @@
 <p>
   pets works!
 </p>
+<button
+  class="btn btn-primary"
+  (click)="onCreate()"
+>Create a new Pet</button>
+<div class="row">
+  <div class="col-xs-4">
+    <app-pets-list pets="pets"></app-pets-list>
+  </div>
+  <div class="col-xs-8">
+    <router-outlet></router-outlet>
+  </div>
+</div>
