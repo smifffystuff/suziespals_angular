@@ -11,55 +11,54 @@ resource "aws_cognito_user_pool" "pool" {
 
   schema = [
     {
-    attribute_data_type = "String"
-    name                = "name"
-    required            = true
-    mutable = true
+      attribute_data_type = "String"
+      name                = "name"
+      required            = true
+      mutable             = true
 
-    string_attribute_constraints {
-      min_length = 0
-      max_length = 50
+      string_attribute_constraints {
+        min_length = 0
+        max_length = 50
       }
     },
     {
-    attribute_data_type = "String"
-    name                = "gender"
-    required            = false
-    mutable = true
+      attribute_data_type = "String"
+      name                = "gender"
+      required            = false
+      mutable             = true
 
-   string_attribute_constraints {
-      min_length = 0
-      max_length = 10
+      string_attribute_constraints {
+        min_length = 0
+        max_length = 10
       }
     },
     {
-    attribute_data_type = "String"
-    name                = "location"
-    required            = false
-    mutable = true
+      attribute_data_type = "String"
+      name                = "location"
+      required            = false
+      mutable             = true
 
-    string_attribute_constraints {
-      min_length = 0
-      max_length = 25
+      string_attribute_constraints {
+        min_length = 0
+        max_length = 25
       }
     },
     {
-    attribute_data_type = "Number"
-    name                = "numberOfPets"
-    required            = false
-    mutable = true
+      attribute_data_type = "Number"
+      name                = "numberOfPets"
+      required            = false
+      mutable             = true
 
-    number_attribute_constraints {
-      min_value = 0
-      max_value = 10
+      number_attribute_constraints {
+        min_value = 0
+        max_value = 10
       }
     },
     {
-    attribute_data_type = "DateTime"
-    name                = "joined"
-    required            = false
-
-    }
+      attribute_data_type = "DateTime"
+      name                = "joined"
+      required            = false
+    },
   ]
 
   password_policy = {
@@ -86,7 +85,7 @@ resource "aws_cognito_identity_pool" "ip" {
 
   cognito_identity_providers {
     client_id               = "${aws_cognito_user_pool_client.client.id}"
-    provider_name           = "cognito-idp.us-east-1.amazonaws.com/${aws_cognito_user_pool.pool.id}"
+    provider_name           = "cognito-idp.${var.region}.amazonaws.com/${aws_cognito_user_pool.pool.id}"
     server_side_token_check = true
   }
 }

@@ -5,6 +5,73 @@ resource "aws_api_gateway_resource" "pets" {
   path_part   = "pets"
 }
 
+// GET METHOD
+resource "aws_api_gateway_method" "pets_get" {
+  rest_api_id   = "${aws_api_gateway_rest_api.api.id}"
+  resource_id   = "${aws_api_gateway_resource.pets.id}"
+  http_method   = "GET"
+  authorization = "COGNITO_USER_POOLS"
+  authorizer_id = "${aws_api_gateway_authorizer.auth.id}"
+}
+
+resource "aws_api_gateway_integration" "pets_get" {
+  rest_api_id             = "${aws_api_gateway_rest_api.api.id}"
+  resource_id             = "${aws_api_gateway_resource.pets.id}"
+  http_method             = "${aws_api_gateway_method.pets_get.http_method}"
+  integration_http_method = "POST"
+  type                    = "AWS"
+  uri                     = "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${var.get_pets_lambda_arn}/invocations"
+
+  request_templates {
+    "application/json" = <<EOF
+{
+    "userId": "$context.authorizer.claims.sub"
+}
+EOF
+  }
+}
+
+resource "aws_api_gateway_method_response" "pets_get_200" {
+  rest_api_id = "${aws_api_gateway_rest_api.api.id}"
+  resource_id = "${aws_api_gateway_resource.pets.id}"
+  http_method = "${aws_api_gateway_method.pets_get.http_method}"
+  status_code = "200"
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin" = true
+  }
+}
+
+resource "aws_api_gateway_integration_response" "pets_get" {
+  rest_api_id = "${aws_api_gateway_rest_api.api.id}"
+  resource_id = "${aws_api_gateway_resource.pets.id}"
+  http_method = "${aws_api_gateway_method.pets_get.http_method}"
+  status_code = "${aws_api_gateway_method_response.pets_get_200.status_code}"
+
+  response_parameters {
+    "method.response.header.Access-Control-Allow-Origin" = "'*'"
+  }
+
+  response_templates {
+    "application/json" = <<EOF
+
+EOF
+  }
+
+  depends_on = [
+    "aws_api_gateway_integration.pets_get",
+  ]
+}
+
+resource "aws_lambda_permission" "pets_get" {
+  statement_id  = "pets_get"
+  action        = "lambda:InvokeFunction"
+  function_name = "${var.get_pets_lambda_arn}"
+  principal     = "apigateway.amazonaws.com"
+
+  source_arn = "arn:aws:execute-api:us-east-1:240400571745:${aws_api_gateway_rest_api.api.id}/*/${aws_api_gateway_method.pets_get.http_method}${aws_api_gateway_resource.pets.path}"
+}
+
 // POST METHOD
 resource "aws_api_gateway_method" "pets_post" {
   rest_api_id   = "${aws_api_gateway_rest_api.api.id}"
@@ -12,7 +79,6 @@ resource "aws_api_gateway_method" "pets_post" {
   http_method   = "POST"
   authorization = "COGNITO_USER_POOLS"
   authorizer_id = "${aws_api_gateway_authorizer.auth.id}"
-
 }
 
 resource "aws_api_gateway_integration" "pets_post" {
@@ -25,17 +91,16 @@ resource "aws_api_gateway_integration" "pets_post" {
 
   request_templates {
     "application/json" = <<EOF
-{
-   #set($inputRoot = $input.path('$'))
-   {
-     "userId": "$context.authorizer.claims.sub",
-     "name": "$inputRoot.name",
-     "animalType": "$inputRoot.animalType",
-     "breed": "$inputRoot.breed",
-     "age": "$inputRoot.age",
-     "gender": "$inputRoot.gender",
-      "bio": "$inputRoot.bio"
-  }
+  #set($inputRoot = $input.path('$'))
+  {
+    "userId": "$context.authorizer.claims.sub",
+    "name": "$inputRoot.name",
+    "animalType": "$inputRoot.animalType",
+    "breed": "$inputRoot.breed",
+    "age": "$inputRoot.age",
+    "gender": "$inputRoot.gender",
+    "bio": "$inputRoot.bio",
+    "profileImage": "$inputRoot.profileImage"
 }
 EOF
   }
@@ -71,6 +136,15 @@ EOF
   depends_on = [
     "aws_api_gateway_integration.pets_post",
   ]
+}
+
+resource "aws_lambda_permission" "pets_post" {
+  statement_id  = "pets_post"
+  action        = "lambda:InvokeFunction"
+  function_name = "${var.create_pet_lambda_arn}"
+  principal     = "apigateway.amazonaws.com"
+
+  source_arn = "arn:aws:execute-api:us-east-1:240400571745:${aws_api_gateway_rest_api.api.id}/*/${aws_api_gateway_method.pets_post.http_method}${aws_api_gateway_resource.pets.path}"
 }
 
 // OPTIONS METHOD
@@ -130,11 +204,4 @@ resource "aws_api_gateway_integration_response" "pets_options" {
 }
 
 // Permissions
-resource "aws_lambda_permission" "pets_post" {
-  statement_id  = "pets_post"
-  action        = "lambda:InvokeFunction"
-  function_name = "${var.create_pet_lambda_arn}"
-  principal     = "apigateway.amazonaws.com"
 
-  source_arn = "arn:aws:execute-api:us-east-1:240400571745:${aws_api_gateway_rest_api.api.id}/*/${aws_api_gateway_method.pets_post.http_method}${aws_api_gateway_resource.pets.path}"
-}

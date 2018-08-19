@@ -1,3 +1,25 @@
-<p>
-  {{ pet.name }}
-</p>
+<div class="card">
+  <div class="card-header">
+    {{ pet.name }}
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">{{ pet.gender }} {{ pet.breed }} ({{ pet.age }})</h5>
+    <div class="row">
+      <div class="col-xs-8">
+        <p class="card-text">{{ pet.bio }}</p>
+      </div>
+      <div class="col-xs-4">
+        <img
+          *ngIf="pet.profileImage !== ''"
+          [src]="pet.profileImage"
+          alt=""
+          style="width: 150px;"
+        >
+      </div>
+    </div>
+    <a
+      href="#"
+      class="btn btn-primary"
+    >Edit</a>
+  </div>
+</div>

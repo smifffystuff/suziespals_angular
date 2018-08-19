@@ -1,3 +1,4 @@
+import { PetsEmptyComponent } from './pets-empty/pets-empty.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
@@ -7,8 +8,7 @@ import { PetsNewComponent } from './pets-new/pets-new.component';
 const petRoutes: Routes = [
   {
     path: 'pets',
-    component: PetsComponent,
-    children: [{ path: 'new', component: PetsNewComponent }]
+    component: PetsComponent
   }
 ];
 

@@ -1,3 +1,6 @@
-<p>
-  pets-empty works!
-</p>
+<div class="row">
+  <div class="col-xs-12">
+    <h2 *ngIf="havePets">Please select a pet from above</h2>
+    <h2 *ngIf="!havePets">You do not have any pets yet, please create one.</h2>
+  </div>
+</div>

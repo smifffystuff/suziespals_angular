@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "package": "npm run package --prefix createPet && npm run package --prefix getAllPosts"
+    "package": "npm run package --prefix createPet && npm run package --prefix getPetss"
   },
   "keywords": [],
   "author": "",

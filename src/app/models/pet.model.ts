@@ -13,6 +13,6 @@ export class Pet {
     public gender: string,
     public age: string,
     public bio: string,
-    public profileImageId: string
+    public profileImage: string
   ) {}
 }

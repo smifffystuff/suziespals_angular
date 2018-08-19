@@ -1,3 +1,12 @@
+resource "aws_db_subnet_group" "default" {
+  name       = "${var.db_name}-subnet-group"
+  subnet_ids = ["${var.subnet_ids}"]
+
+  tags {
+    Name = "My DB subnet group"
+  }
+}
+
 resource "aws_db_instance" "default" {
   allocated_storage      = 10
   storage_type           = "gp2"
@@ -16,6 +25,7 @@ resource "aws_db_instance" "default" {
   publicly_accessible    = true
   skip_final_snapshot    = true
   vpc_security_group_ids = ["${var.sg_id}"]
+  db_subnet_group_name   = "${aws_db_subnet_group.default.name}"
 
   provisioner "local-exec" {
     command     = "/Users/martin/website/suziespals-ang/aws/sql/build.js"

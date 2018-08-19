@@ -3,8 +3,9 @@ resource "aws_lambda_function" "function" {
   filename         = "${var.file_name}"
   role             = "${var.iam_role_arn}"
   handler          = "index.handler"
-  source_code_hash = "${var.source_code_hash}"
+  source_code_hash = "${base64sha256(file("${var.file_name}"))}"
   runtime          = "nodejs8.10"
+  timeout          = "${var.timeout}"
 
   vpc_config = {
     subnet_ids = ["${var.subnet_ids}"]

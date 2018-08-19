@@ -3,6 +3,11 @@ resource "aws_s3_bucket" "images" {
   acl    = "private"
 }
 
+resource "aws_s3_bucket" "config" {
+  bucket = "config.${var.site_name}.co.uk"
+  acl    = "private"
+}
+
 resource "aws_s3_bucket" "main" {
   bucket = "${var.site_name}.co.uk"
   acl    = "private"
@@ -13,8 +18,8 @@ resource "aws_s3_bucket" "main" {
   }
 
   provisioner "local-exec" {
-    when = "destroy"
-    command = "aws s3 rm --region us-east-1 --profile terraform --recursive s3://suziespals.co.uk/"
+    when    = "destroy"
+    command = "aws s3 rm --region ${var.region} --profile terraform --recursive s3://suziespals.co.uk/"
   }
 
   policy = <<POLICY
@@ -42,8 +47,8 @@ resource "aws_s3_bucket" "www" {
   }
 
   provisioner "local-exec" {
-    when = "destroy"
-    command = "aws s3 rm --region us-east-1 --profile terraform --recursive s3://www.suziespals.co.uk/"
+    when    = "destroy"
+    command = "aws s3 rm --region ${var.region} --profile terraform --recursive s3://www.suziespals.co.uk/"
   }
 
   policy = <<POLICY
@@ -61,7 +66,6 @@ resource "aws_s3_bucket" "www" {
 }
 POLICY
 }
-
 
 output "main_web_endpoint" {
   value = "${aws_s3_bucket.main.website_endpoint}"

@@ -1,0 +1,9 @@
+version: '3'
+services:
+  suziespals-mysql:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3306:3306'
+    container_name: suziespals-mysql

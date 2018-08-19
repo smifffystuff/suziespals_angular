@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from 'node_modules/@angular/router';
 
 import { Pet } from '../models/pet.model';
@@ -9,8 +10,12 @@ import { PetsService } from './pets.service';
   templateUrl: './pets.component.html',
   styleUrls: ['./pets.component.css']
 })
-export class PetsComponent implements OnInit {
+export class PetsComponent implements OnInit, OnDestroy {
   pets: Pet[] = [];
+  mode = 'select';
+
+  petsChangedSub: Subscription;
+  petAddedSub: Subscription;
 
   constructor(
     private router: Router,
@@ -19,13 +24,21 @@ export class PetsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.petsService.petsChanged.subscribe(pets => {
+    this.petsChangedSub = this.petsService.petsChanged.subscribe(pets => {
       this.pets = pets;
+    });
+    this.petAddedSub = this.petsService.petAdded.subscribe(() => {
+      this.mode = 'select';
     });
     this.petsService.getPets();
   }
 
+  ngOnDestroy() {
+    this.petsChangedSub.unsubscribe();
+    this.petAddedSub.unsubscribe();
+  }
+
   onCreate() {
-    this.router.navigate(['new'], { relativeTo: this.route });
+    this.mode = 'create';
   }
 }

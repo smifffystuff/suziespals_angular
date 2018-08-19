@@ -92,6 +92,34 @@ resource "aws_iam_role" "cognito_unauth" {
 POLICY
 }
 
+resource "aws_iam_role" "cognito_auth" {
+  name = "Cognito_${var.name}Auth_Role"
+  path = "/"
+
+  assume_role_policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "cognito-identity.amazonaws.com"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "cognito-identity.amazonaws.com:aud": "${var.ip_id}"
+        },
+        "ForAnyValue:StringLike": {
+          "cognito-identity.amazonaws.com:amr": "authenticated"
+        }
+      }
+    }
+  ]
+}
+POLICY
+}
+
 resource "aws_iam_policy" "cognito_unauth_policy" {
   name        = "Cognito_${var.name}Unauth_RolePolicy"
   path        = "/"
@@ -122,34 +150,6 @@ resource "aws_iam_policy_attachment" "cognito-unauth-policy-attachment" {
   groups     = []
   users      = []
   roles      = ["${aws_iam_role.cognito_unauth.name}"]
-}
-
-resource "aws_iam_role" "cognito_auth" {
-  name = "Cognito_${var.name}Auth_Role"
-  path = "/"
-
-  assume_role_policy = <<POLICY
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Federated": "cognito-identity.amazonaws.com"
-      },
-      "Action": "sts:AssumeRoleWithWebIdentity",
-      "Condition": {
-        "StringEquals": {
-          "cognito-identity.amazonaws.com:aud": "${var.ip_id}"
-        },
-        "ForAnyValue:StringLike": {
-          "cognito-identity.amazonaws.com:amr": "authenticated"
-        }
-      }
-    }
-  ]
-}
-POLICY
 }
 
 resource "aws_iam_policy" "cognito_auth_policy" {

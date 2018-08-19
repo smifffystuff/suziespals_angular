@@ -82,6 +82,29 @@
           ></textarea>
 
         </div>
+        <div class="row">
+          <div class="col-xs-8">
+            <div class="form-group">
+              <label for="profileImage">Select a picture of your pet</label>
+              <input
+                name="profileImage"
+                id="profileImage"
+                type="file"
+                (change)="onFileSelected($event)"
+                accept="image/*"
+              >
+            </div>
+          </div>
+          <div
+            *ngIf="imageData !== 'NOIMAGE'"
+            class="col-xs-4"
+          >
+            <img
+              [src]="imageData"
+              style="width: 100px;"
+            >
+          </div>
+        </div>
 
         <button
           class="btn btn-primary"

@@ -2,14 +2,29 @@ data "aws_subnet_ids" "subnets" {
   vpc_id = "vpc-09189870"
 }
 
+module "get_pets" {
+  source = "./function"
+
+  region        = "${var.region}"
+  function_name = "${var.name}_api_getPets"
+  file_name     = "${path.module}/zips/getPets.zip"
+  iam_role_arn  = "${var.iam_role_arn}"
+  subnet_ids    = "${data.aws_subnet_ids.subnets.ids}"
+}
+
+output "get_pets_lambda_arn" {
+  value = "${module.get_pets.arn}"
+}
+
 module "create_pet" {
   source = "./function"
 
-  function_name    = "${var.name}_api_createPet"
-  file_name        = "${path.module}/zips/createPet.zip"
-  iam_role_arn     = "${var.iam_role_arn}"
-  source_code_hash = "${base64sha256(file("${path.module}/zips/createPet.zip"))}"
-  subnet_ids       = "${data.aws_subnet_ids.subnets.ids}"
+  region        = "${var.region}"
+  function_name = "${var.name}_api_createPet"
+  file_name     = "${path.module}/zips/createPet.zip"
+  iam_role_arn  = "${var.iam_role_arn}"
+  subnet_ids    = "${data.aws_subnet_ids.subnets.ids}"
+  timeout       = "30"
 }
 
 output "create_pet_lambda_arn" {
@@ -19,11 +34,11 @@ output "create_pet_lambda_arn" {
 module "get_all_posts" {
   source = "./function"
 
-  function_name    = "${var.name}_api_getAllPosts"
-  file_name        = "${path.module}/zips/getAllPosts.zip"
-  iam_role_arn     = "${var.iam_role_arn}"
-  source_code_hash = "${base64sha256(file("${path.module}/zips/getAllPosts.zip"))}"
-  subnet_ids       = "${data.aws_subnet_ids.subnets.ids}"
+  region        = "${var.region}"
+  function_name = "${var.name}_api_getAllPosts"
+  file_name     = "${path.module}/zips/getAllPosts.zip"
+  iam_role_arn  = "${var.iam_role_arn}"
+  subnet_ids    = "${data.aws_subnet_ids.subnets.ids}"
 }
 
 output "get_all_posts_lambda_arn" {

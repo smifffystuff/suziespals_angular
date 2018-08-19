@@ -1,3 +1,5 @@
+variable "region" {}
+
 variable "pool_name" {}
 
 variable "ip_auth_arn" {}

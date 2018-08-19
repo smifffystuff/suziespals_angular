@@ -6,10 +6,18 @@
   (click)="onCreate()"
 >Create a new Pet</button>
 <div class="row">
-  <div class="col-xs-4">
+  <div class="col-xs-12">
     <app-pets-list pets="pets"></app-pets-list>
   </div>
-  <div class="col-xs-8">
-    <router-outlet></router-outlet>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <app-pets-empty
+      *ngIf="mode == 'select'"
+      [havePets]="pets.length>0"
+    ></app-pets-empty>
+    <app-pets-edit *ngIf="mode == 'edit'"></app-pets-edit>
+    <app-pets-detail *ngIf="mode == 'detail'"></app-pets-detail>
+    <app-pets-new *ngIf="mode == 'create'"></app-pets-new>
   </div>
 </div>

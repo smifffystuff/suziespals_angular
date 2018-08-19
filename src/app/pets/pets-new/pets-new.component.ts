@@ -1,5 +1,6 @@
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from 'node_modules/@angular/forms';
+import { NgForm } from '@angular/forms';
 
 import { Pet } from '../../models/pet.model';
 import { PetsService } from '../pets.service';
@@ -12,8 +13,9 @@ import { PetsService } from '../pets.service';
 export class PetsNewComponent implements OnInit {
   pet: Pet;
   isLoading: false;
+  imageData = 'NOIMAGE';
 
-  constructor(private petsService: PetsService) {}
+  constructor(private petsService: PetsService, private router: Router) {}
 
   ngOnInit() {}
 
@@ -25,9 +27,25 @@ export class PetsNewComponent implements OnInit {
       form.value.gender,
       form.value.age,
       form.value.bio,
-      ''
+      this.imageData === 'NOIMAGE' ? '' : this.imageData
     );
 
     this.petsService.addPet(newPet);
+  }
+
+  onFileSelected(event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.addEventListener(
+      'load',
+      () => {
+        this.imageData = reader.result;
+      },
+      false
+    );
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
   }
 }

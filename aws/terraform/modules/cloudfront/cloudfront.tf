@@ -1,5 +1,5 @@
 data "aws_acm_certificate" "website" {
-  domain   = "suziespals.co.uk"
+  domain = "suziespals.co.uk"
 }
 
 output "cert_arn" {

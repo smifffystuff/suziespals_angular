@@ -1,12 +1,30 @@
 #! /bin/bash
+set -e
+
+# cd ../sql
+
+# $(aws ecr get-login --no-include-email --region us-east-1 --profile terraform)
+
+# docker build -t suziespals-mysql .
+
+# docker tag suziespals-mysql:latest 240400571745.dkr.ecr.us-east-1.amazonaws.com/suziespals-mysql:latest
+
+# docker push 240400571745.dkr.ecr.us-east-1.amazonaws.com/suziespals-mysql:latest
+
+cd ../terraform
+
+rm -f mykey mykey.pub
+
+ssh-keygen -t rsa -N "" -f mykey
 
 terraform init
 
-terraform apply
+terraform apply --auto-approve
 
 terraform output -json > ../../config/aws_config.json
 
 cd ../../config/
+
 node update_config.js
 
 cd ../
